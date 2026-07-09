@@ -40,7 +40,8 @@ export async function loginAction(formData: FormData) {
       .eq('id', user.id)
       .single();
 
-    const roleName = profile?.roles?.name;
+    const rolesData = profile?.roles as any;
+    const roleName = Array.isArray(rolesData) ? rolesData[0]?.name : rolesData?.name;
 
     if (roleName === 'super_admin') return redirect('/backstage');
     if (roleName === 'clerk') return redirect('/clerk');
@@ -111,7 +112,9 @@ export async function resetPasswordAction(formData: FormData) {
     return { error: 'No account found with this CNIC' };
   }
 
-  const roleName = profile.roles?.name;
+  const rolesData = profile?.roles as any;
+  const roleName = Array.isArray(rolesData) ? rolesData[0]?.name : rolesData?.name;
+  
   if (roleName === 'clerk' || roleName === 'super_admin') {
     return { error: 'Password reset is not permitted for staff accounts. Contact Super Admin.' };
   }

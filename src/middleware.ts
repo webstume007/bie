@@ -1,4 +1,4 @@
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({
             request,
@@ -49,7 +49,8 @@ export async function middleware(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    const roleName = profile?.roles?.name
+    const rolesData = profile?.roles as any
+    const roleName = Array.isArray(rolesData) ? rolesData[0]?.name : rolesData?.name
     const url = request.nextUrl.clone()
 
     if (roleName === 'super_admin') url.pathname = '/backstage'
@@ -64,7 +65,9 @@ export async function middleware(request: NextRequest) {
   // Optional: Enforce specific role access (e.g. only super_admin can access /backstage)
   if (user && request.nextUrl.pathname.startsWith('/backstage')) {
     const { data: profile } = await supabase.from('user_profiles').select('roles(name)').eq('id', user.id).single()
-    if (profile?.roles?.name !== 'super_admin') {
+    const rolesData = profile?.roles as any
+    const roleName = Array.isArray(rolesData) ? rolesData[0]?.name : rolesData?.name
+    if (roleName !== 'super_admin') {
       const url = request.nextUrl.clone()
       url.pathname = '/'
       return NextResponse.redirect(url)
