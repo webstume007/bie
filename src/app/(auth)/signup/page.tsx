@@ -34,9 +34,9 @@ export default function SignupPage() {
         <form action={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="role">I am registering as</Label>
-            <select 
-              id="role" 
-              name="role" 
+            <select
+              id="role"
+              name="role"
               className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               required
             >
@@ -54,12 +54,12 @@ export default function SignupPage() {
             <Label htmlFor="email">Email address</Label>
             <Input id="email" name="email" type="email" placeholder="m@example.com" required />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input id="password" name="password" type="password" required />
           </div>
-          
+
           {error && <div className="text-sm text-red-500 font-medium">{error}</div>}
 
           <Button className="w-full" type="submit" disabled={loading}>
