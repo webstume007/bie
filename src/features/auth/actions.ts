@@ -62,7 +62,7 @@ export async function signupAction(formData: FormData) {
     return { error: 'All fields are required' };
   }
 
-  if (role !== 'student' && role !== 'institute') {
+  if (role !== 'student') {
     return { error: 'Invalid role selection' };
   }
 

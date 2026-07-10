@@ -21,10 +21,7 @@ export default function AuthPage() {
       loginTitle: 'Welcome back',
       loginDesc: 'Enter your credentials to access your account',
       signupTitle: 'Create an account',
-      signupDesc: 'Enter your details to register as a student or institute',
-      role: 'I am registering as',
-      roleStudent: 'Student / Parent',
-      roleInstitute: 'Institute (Madrasa)',
+      signupDesc: 'Enter your details to register as a student',
       cnic: 'CNIC Number',
       cnicPlaceholder: 'XXXXX-XXXXXXX-X',
       email: 'Email address',
@@ -40,10 +37,7 @@ export default function AuthPage() {
       loginTitle: 'خوش آمدید',
       loginDesc: 'اپنے اکاؤنٹ تک رسائی کے لیے اپنی تفصیلات درج کریں',
       signupTitle: 'اکاؤنٹ بنائیں',
-      signupDesc: 'طالب علم یا ادارے کے طور پر رجسٹر کرنے کے لیے اپنی تفصیلات درج کریں',
-      role: 'میں رجسٹر کر رہا ہوں بطور',
-      roleStudent: 'طالب علم / سرپرست',
-      roleInstitute: 'ادارہ (مدرسہ)',
+      signupDesc: 'طالب علم کے طور پر رجسٹر کرنے کے لیے اپنی تفصیلات درج کریں',
       cnic: 'شناختی کارڈ نمبر',
       cnicPlaceholder: 'XXXXX-XXXXXXX-X',
       email: 'ای میل ایڈریس',
@@ -58,14 +52,14 @@ export default function AuthPage() {
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
-    
+
     let result;
     if (mode === 'login') {
       result = await loginAction(formData);
     } else {
       result = await signupAction(formData);
     }
-    
+
     if (result?.error) {
       setError(result.error);
     }
@@ -78,21 +72,19 @@ export default function AuthPage() {
       <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mb-6">
         <button
           onClick={() => { setMode('login'); setError(null); }}
-          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
-            mode === 'login' 
-              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' 
+          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${mode === 'login'
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400'
               : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
-          }`}
+            }`}
         >
           {t.signIn}
         </button>
         <button
           onClick={() => { setMode('signup'); setError(null); }}
-          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
-            mode === 'signup' 
-              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' 
+          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${mode === 'signup'
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400'
               : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
-          }`}
+            }`}
         >
           {t.signUp}
         </button>
@@ -108,20 +100,7 @@ export default function AuthPage() {
       </div>
 
       <form action={handleSubmit} className="space-y-4">
-        {mode === 'signup' && (
-          <div className="space-y-2">
-            <Label htmlFor="role">{t.role}</Label>
-            <select
-              id="role"
-              name="role"
-              className="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-              required
-            >
-              <option value="student">{t.roleStudent}</option>
-              <option value="institute">{t.roleInstitute}</option>
-            </select>
-          </div>
-        )}
+        <input type="hidden" name="role" value="student" />
 
         <div className="space-y-2">
           <Label htmlFor="cnic">{t.cnic}</Label>
@@ -146,7 +125,7 @@ export default function AuthPage() {
           </div>
           <Input id="password" name="password" type="password" required className="h-10" />
         </div>
-        
+
         {error && <div className="text-sm text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/10 rounded-md border border-red-100 dark:border-red-900/50">{error}</div>}
 
         <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white" type="submit" disabled={loading}>
