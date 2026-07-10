@@ -177,12 +177,12 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 rounded-2xl p-2 shadow-xl border-border">
-              <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
-                <Link href="/institute/profile" className="flex items-center gap-2">
+              <Link href="/institute/profile">
+                <DropdownMenuItem className="rounded-xl cursor-pointer flex items-center gap-2">
                   <UserCircle className="size-4 text-muted-foreground" />
                   {t.profile}
-                </Link>
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator className="my-2" />
               <DropdownMenuItem onClick={handleLogout} className="rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">
                 <LogOut className="size-4 mr-2" />
