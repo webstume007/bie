@@ -18,8 +18,14 @@ A modern, secure, and real-time educational management portal designed for an Is
 
 ### 1.4 UI/UX & Frontend Guidelines
 * **Core Libraries:** `shadcn/ui` and Tailwind CSS for accessible, responsive, and professional UI components.
+* **Apple & Google UI Inspired Design:** The design system uses premium off-white/charcoal light mode and slate dark mode backgrounds, increased card corner radii (`rounded-2xl` / `1rem`), high contrast text colors, and subtle micro-interactions/transitions.
+* **Brand Logo Header:** The main header of all dashboard views displays the official `logo.webp` alongside `bie-logo.svg` (for the title), including a CSS fallback element if `logo.webp` is missing.
 * **Auth Page Experience:** Integrate `Three.js` on the login/signup pages to render a 3D, interactive Islamic-themed environment (e.g., desert landscape, date palm trees, greenery).
-* **Form Draft Persistence:** Implement local storage/state management for all forms. If a user goes offline or refreshes the page, the form must resume exactly from their last draft.
+* **Form Draft Persistence (useFormDraft):** Forms use the custom `useFormDraft` hook which automatically:
+  - Backs up input states to `localStorage` under dynamic keys on keystroke.
+  - Intercepts page refresh/close events (`beforeunload`) to alert the user if they have unsaved changes.
+  - Merges local drafts with database records upon loading, prioritizing local changes.
+  - Auto-clears drafts upon successful submission.
 * **File Upload Constraints:** Strict client-side and server-side validation limiting user image uploads (e.g., profile pictures, document scans) to a maximum size of **300 KB**.
 
 ### 1.5 Role-Based Access Control (RBAC) & Features

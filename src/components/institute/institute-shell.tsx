@@ -120,6 +120,29 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
             <Menu className="size-6" />
           </button>
           
+          <div className="flex items-center gap-3 ml-2 lg:ml-0 rtl:mr-2 rtl:lg:mr-0">
+            <img 
+              src="/logo.webp" 
+              alt="BIE" 
+              className="h-9 w-auto object-contain shrink-0" 
+              onError={(e) => { 
+                e.currentTarget.style.display = 'none'; 
+                const parent = e.currentTarget.parentElement;
+                if (parent && !parent.querySelector('.logo-fallback')) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'logo-fallback size-9 rounded-full bg-indigo-100 dark:bg-indigo-950/50 flex items-center justify-center font-bold text-xs text-indigo-700 dark:text-indigo-300 shrink-0';
+                  fallback.innerText = 'BIE';
+                  parent.insertBefore(fallback, e.currentTarget);
+                }
+              }} 
+            />
+            <img 
+              src="/bie-logo.svg" 
+              alt="BIE Title" 
+              className="h-6 w-auto object-contain dark:invert" 
+            />
+          </div>
+          
           <div className="flex-1"></div>
           
           <div className="flex items-center gap-4">

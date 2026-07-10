@@ -38,7 +38,7 @@ export default async function StudentEnrollmentsPage() {
       </div>
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium">
@@ -59,7 +59,7 @@ export default async function StudentEnrollmentsPage() {
                   </td>
                 </tr>
               )}
-              
+
               {!error && (!enrollments || enrollments.length === 0) && (
                 <tr>
                   <td colSpan={6} className="px-6 py-16 text-center">
@@ -79,7 +79,7 @@ export default async function StudentEnrollmentsPage() {
                 const sessionName = enrollment.sessions?.title || 'Unknown Session';
                 const degreeName = enrollment.degrees?.name || 'Unknown Degree';
                 const isRegular = enrollment.enrollment_type === 'REGULAR';
-                
+
                 return (
                   <tr key={enrollment.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                     <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
@@ -102,11 +102,10 @@ export default async function StudentEnrollmentsPage() {
                       {enrollment.assigned_roll_no || 'Pending'}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                        enrollment.status === 'APPROVED' ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' : 
-                        enrollment.status === 'REJECTED' ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400' : 
-                        'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400'
-                      }`}>
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${enrollment.status === 'APPROVED' ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' :
+                          enrollment.status === 'REJECTED' ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400' :
+                            'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400'
+                        }`}>
                         {enrollment.status === 'APPROVED' && <CheckCircle className="size-3" />}
                         {enrollment.status || 'PENDING'}
                       </span>
