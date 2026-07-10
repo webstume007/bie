@@ -176,10 +176,20 @@
   }
   .font-urdu, .font-urdu * {
     font-family: var(--font-urdu) !important;
+    font-weight: 600 !important;
   }
   .font-urdu {
     direction: rtl;
   }
+}
+
+@keyframes breadcrumb-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.animate-breadcrumb-pulse {
+  animation: breadcrumb-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Elegant Apple/Google Minimal Transitions & Hover Animations */

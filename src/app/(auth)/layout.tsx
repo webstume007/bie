@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <img 
             src="/logo.webp" 
             alt="BIE" 
-            className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5" 
+            className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5 animate-breadcrumb-pulse" 
           />
           <img 
             src="/bie-logo.svg" 

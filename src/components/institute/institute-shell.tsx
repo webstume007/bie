@@ -119,7 +119,7 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
             <img 
               src="/logo.webp" 
               alt="BIE" 
-              className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5" 
+              className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5 animate-breadcrumb-pulse" 
               onError={(e) => { 
                 e.currentTarget.style.display = 'none'; 
                 const parent = e.currentTarget.parentElement;
