@@ -17,7 +17,7 @@ export default async function InstituteStudentsPage() {
     .eq('head_user_id', user.id)
     .single();
 
-  let enrollments = [];
+  let enrollments: any[] = [];
   
   if (institute) {
     // Fetch students enrolled with this institute
