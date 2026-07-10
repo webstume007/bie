@@ -59,7 +59,7 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -84,15 +84,15 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const isReallyActive = item.href === '/institute' ? pathname === '/institute' : isActive;
-            
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
                 className={`
                   flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium transition-all
-                  ${isReallyActive 
-                    ? 'bg-primary text-primary-foreground shadow-md' 
+                  ${isReallyActive
+                    ? 'bg-primary text-primary-foreground shadow-md'
                     : 'text-foreground hover:bg-secondary/50 hover:text-primary'}
                 `}
                 onClick={() => setSidebarOpen(false)}
@@ -114,14 +114,14 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
           >
             <Menu className="size-6" />
           </button>
-          
+
           <Link href="/institute" className="flex items-center gap-3 rtl:mr-2 rtl:lg:mr-0 hover:opacity-80 transition-opacity">
-            <img 
-              src="/logo.webp" 
-              alt="BIE" 
-              className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5 animate-breadcrumb-pulse" 
-              onError={(e) => { 
-                e.currentTarget.style.display = 'none'; 
+            <img
+              src="/logo.webp"
+              alt="BIE"
+              className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5 animate-breadcrumb-pulse"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
                 const parent = e.currentTarget.parentElement;
                 if (parent && !parent.querySelector('.logo-fallback')) {
                   const fallback = document.createElement('div');
@@ -129,12 +129,12 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
                   fallback.innerText = 'BIE';
                   parent.insertBefore(fallback, e.currentTarget);
                 }
-              }} 
+              }}
             />
-            <img 
-              src="/bie-logo.svg" 
-              alt="BIE Title" 
-              className="h-7 w-auto object-contain dark:brightness-0 dark:invert brightness-0 invert" 
+            <img
+              src="/bie-logo.svg"
+              alt="BIE Title"
+              className="h-7 w-auto object-contain dark:brightness-0 dark:invert brightness-0 invert"
             />
           </Link>
         </div>
@@ -144,15 +144,15 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const isReallyActive = item.href === '/institute' ? pathname === '/institute' : isActive;
-            
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
                 className={`
                   flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ease-out hover-lift
-                  ${isReallyActive 
-                    ? 'bg-primary text-primary-foreground shadow-md' 
+                  ${isReallyActive
+                    ? 'bg-primary text-primary-foreground shadow-md'
                     : 'text-neutral-300 hover:bg-white/10 hover:text-white'}
                 `}
               >
@@ -162,7 +162,7 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
             )
           })}
         </nav>
-        
+
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           <ThemeToggle />

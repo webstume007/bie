@@ -7,12 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export default function AuthPage() {
   const { language } = useLanguage();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const t = {
     en: {
@@ -45,7 +47,7 @@ export default function AuthPage() {
       forgotPassword: 'پاس ورڈ بھول گئے؟',
       signInBtn: 'سائن ان کریں',
       signUpBtn: 'اکاؤنٹ بنائیں',
-      loading: 'براہ کرم انتظار کریں...',
+      loading: 'انتظار فرمائیے...',
     }
   }[language];
 
@@ -123,13 +125,33 @@ export default function AuthPage() {
               </Link>
             )}
           </div>
-          <Input id="password" name="password" type="password" required className="h-10" />
+          <div className="relative">
+            <Input 
+              id="password" 
+              name="password" 
+              type={showPassword ? "text" : "password"} 
+              required 
+              className="h-10 pr-10 rtl:pr-3 rtl:pl-10" 
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 -translate-y-1/2 right-3 rtl:right-auto rtl:left-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+            >
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
         </div>
 
         {error && <div className="text-sm text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/10 rounded-md border border-red-100 dark:border-red-900/50">{error}</div>}
 
-        <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-neutral-950" type="submit" disabled={loading}>
-          {loading ? t.loading : (mode === 'login' ? t.signInBtn : t.signUpBtn)}
+        <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-neutral-950 font-bold transition-all relative overflow-hidden group" type="submit" disabled={loading}>
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="size-4 animate-spin" />
+              {t.loading}
+            </span>
+          ) : (mode === 'login' ? t.signInBtn : t.signUpBtn)}
         </Button>
       </form>
     </div>
