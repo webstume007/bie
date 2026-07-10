@@ -128,7 +128,7 @@ export function EnrollmentForm({ sessions, degrees }: { sessions: Session[], deg
         <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-800">
           <Button 
             type="submit" 
-            className="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[160px] h-11 text-base"
+            className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 min-w-[160px] h-11 text-base"
             disabled={isPending || sessions.length === 0 || degrees.length === 0}
           >
             {isPending ? (

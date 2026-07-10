@@ -176,7 +176,7 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
           </Link>
           <Button 
             onClick={handleSubmit} 
-            className="bg-indigo-600 hover:bg-indigo-700 text-white" 
+            className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950" 
             disabled={isPending || selectedStudentIds.size === 0 || !sessionId || !degreeId}
           >
             {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}

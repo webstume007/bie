@@ -222,7 +222,7 @@ export default function StudentProfilePage() {
           {success && <div className="text-sm text-green-600 font-medium p-3 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-100 dark:border-green-900/50">{success}</div>}
 
           <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
-            <Button className="h-10 bg-indigo-600 hover:bg-indigo-700 text-white w-full sm:w-auto px-8 rounded-xl hover-lift" type="submit" disabled={loading}>
+            <Button className="h-10 bg-indigo-600 hover:bg-indigo-700 text-neutral-950 w-full sm:w-auto px-8 rounded-xl hover-lift" type="submit" disabled={loading}>
               {loading ? 'Saving...' : 'Save Profile'}
             </Button>
           </div>

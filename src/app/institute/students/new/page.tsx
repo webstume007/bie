@@ -69,7 +69,7 @@ export default function AddRosterStudentPage() {
               <Link href="/institute/students">
                 <Button variant="outline" type="button">Cancel</Button>
               </Link>
-              <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white" disabled={isPending}>
+              <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950" disabled={isPending}>
                 {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
                 Add Student
               </Button>

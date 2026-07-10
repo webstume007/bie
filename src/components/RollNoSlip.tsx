@@ -96,7 +96,7 @@ export function RollNoSlip({ application }: RollNoSlipProps) {
       <div className="mt-8 text-center print:hidden">
         <button 
           onClick={() => window.print()}
-          className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+          className="px-6 py-2 bg-indigo-600 text-neutral-950 rounded-lg hover:bg-indigo-700 font-medium"
         >
           Print Slip
         </button>

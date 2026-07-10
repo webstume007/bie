@@ -34,7 +34,7 @@ export default async function StudentEnrollmentsPage() {
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">View the status of your applications and active enrollments.</p>
         </div>
         <Link href="/student/enrollments/new">
-          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 shadow-sm">
             Apply for Exam
           </Button>
         </Link>

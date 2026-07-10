@@ -70,7 +70,7 @@ export default function PendingActionsTable({ pendingApps, pendingChallans }: { 
                   </div>
                   <div className="flex flex-col gap-2">
                     <Button variant="outline" size="sm" className="w-full">Print</Button>
-                    <Button size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Button size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 text-neutral-950">
                       <Upload className="size-3 mr-2" /> Upload
                     </Button>
                   </div>
@@ -91,7 +91,7 @@ export default function PendingActionsTable({ pendingApps, pendingChallans }: { 
           <Button 
             onClick={handleGenerateChallan}
             disabled={isPending || selectedIds.size === 0}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950"
           >
             {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
             Generate Bulk Challan ({selectedIds.size})

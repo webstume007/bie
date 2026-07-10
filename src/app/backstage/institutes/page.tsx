@@ -32,7 +32,7 @@ export default async function InstitutesPage() {
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage registered educational institutes and their credentials.</p>
         </div>
         <Link href="/backstage/institutes/new">
-          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2">
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 flex items-center gap-2">
             <Plus className="size-4" />
             Add Institute
           </Button>

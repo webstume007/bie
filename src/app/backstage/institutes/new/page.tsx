@@ -161,7 +161,7 @@ export default function NewInstitutePage() {
           {error && <div className="text-sm text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/50">{error}</div>}
 
           <div className="flex justify-end pt-4">
-            <Button className="h-10 bg-indigo-600 hover:bg-indigo-700 text-white w-full sm:w-auto px-8 rounded-xl hover-lift" type="submit" disabled={loading}>
+            <Button className="h-10 bg-indigo-600 hover:bg-indigo-700 text-neutral-950 w-full sm:w-auto px-8 rounded-xl hover-lift" type="submit" disabled={loading}>
               {loading ? 'Creating Account...' : 'Register Institute'}
             </Button>
           </div>

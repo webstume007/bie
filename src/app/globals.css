@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -47,112 +48,120 @@
   --radius-3xl: calc(var(--radius) * 2.5);
   --radius-4xl: calc(var(--radius) * 3);
 
-  /* High Contrast Monochrome Overrides for existing components */
-  --color-slate-50: oklch(0.98 0 0);
-  --color-slate-100: oklch(0.96 0 0);
-  --color-slate-200: oklch(0.92 0 0);
-  --color-slate-300: oklch(0.85 0 0);
-  --color-slate-400: oklch(0.70 0 0);
-  --color-slate-500: oklch(0.50 0 0);
-  --color-slate-600: oklch(0.35 0 0);
-  --color-slate-700: oklch(0.25 0 0);
-  --color-slate-800: oklch(0.15 0 0);
-  --color-slate-900: oklch(0.08 0 0);
-  --color-slate-950: oklch(0.02 0 0);
+  --font-urdu: "IBM Plex Sans Arabic", sans-serif;
 
-  /* Map Indigo to Black/White High Contrast */
-  --color-indigo-50: oklch(0.96 0 0);
-  --color-indigo-100: oklch(0.90 0 0);
-  --color-indigo-200: oklch(0.80 0 0);
-  --color-indigo-300: oklch(0.60 0 0);
-  --color-indigo-400: oklch(0.98 0 0); /* Bright text in dark mode -> Near White */
-  --color-indigo-500: oklch(0.14 0 0); /* Ring focus -> Near Black */
-  --color-indigo-600: oklch(0.14 0 0); /* Primary buttons -> Near Black */
-  --color-indigo-700: oklch(0 0 0);    /* Button hover -> Pure Black */
-  --color-indigo-800: oklch(0 0 0);
-  --color-indigo-900: oklch(1 0 0);    /* Usually text on dark -> Pure White */
+  /* Eduma Global University Theme - Navy and Gold */
+  /* Mapping slate/neutral to Eduma Navy Blue Palette */
+  --color-slate-50: #f4f6f9;
+  --color-slate-100: #e2e8f0;
+  --color-slate-200: #cbd5e1;
+  --color-slate-300: #94a3b8;
+  --color-slate-400: #64748b;
+  --color-slate-500: #475569;
+  --color-slate-600: #334155;
+  --color-slate-700: #1e293b;
+  --color-slate-800: #0f172a;
+  --color-slate-900: #012237; /* Eduma Deep Navy */
+  --color-slate-950: #011826; /* Darker Navy for headers */
+
+  --color-neutral-50: #f4f6f9;
+  --color-neutral-100: #e2e8f0;
+  --color-neutral-200: #cbd5e1;
+  --color-neutral-300: #94a3b8;
+  --color-neutral-400: #64748b;
+  --color-neutral-500: #475569;
+  --color-neutral-600: #334155;
+  --color-neutral-700: #1e293b;
+  --color-neutral-800: #0f172a;
+  --color-neutral-900: #012237;
+  --color-neutral-950: #011826;
+
+  /* Map Indigo to Eduma Gold (Primary Accent) */
+  --color-indigo-50: #fff9e6;
+  --color-indigo-100: #fff0cc;
+  --color-indigo-200: #ffe099;
+  --color-indigo-300: #ffcf66;
+  --color-indigo-400: #ffc333;
+  --color-indigo-500: #ffb606; /* Eduma Gold */
+  --color-indigo-600: #e5a405; /* Eduma Gold Hover */
+  --color-indigo-700: #cc9100;
+  --color-indigo-800: #996d00;
+  --color-indigo-900: #664900;
+  --color-indigo-950: #332400;
 }
 
 :root {
-  /* High Contrast Monochrome Light Theme */
-  --background: oklch(1 0 0);          /* Pure White #ffffff */
-  --foreground: oklch(0.14 0 0);       /* Near Black #222222 */
-  --card: oklch(1 0 0);                /* Pure White #ffffff */
-  --card-foreground: oklch(0.14 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0 0);
+  /* Eduma Light Theme */
+  --background: #f8f9fa; /* Light grey background like Eduma */
+  --foreground: #333333;
+  --card: #ffffff;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
   
-  --primary: oklch(0.14 0 0);          /* Stark Black Primary */
-  --primary-foreground: oklch(1 0 0);
+  --primary: #ffb606; /* Gold */
+  --primary-foreground: #012237; /* Navy Text on Gold for great contrast */
   
-  --secondary: oklch(0.96 0 0);        /* Very Light Neutral Grey #f5f5f5 */
-  --secondary-foreground: oklch(0.14 0 0);
+  --secondary: #012237; /* Navy */
+  --secondary-foreground: #ffffff;
   
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0); /* Medium Grey */
+  --muted: #f4f6f9;
+  --muted-foreground: #64748b;
   
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.14 0 0);
+  --accent: #f4f6f9;
+  --accent-foreground: #012237;
   
-  --destructive: oklch(0.5 0.2 25);    /* Crisp Red */
+  --destructive: #ef4444;
   
-  --border: oklch(0.90 0 0);           /* Very subtle light grey border */
-  --input: oklch(0.90 0 0);
-  --ring: oklch(0.14 0 0);
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #ffb606;
   
-  --chart-1: oklch(0.60 0.18 200);
-  --chart-2: oklch(0.52 0.16 120);
-  --chart-3: oklch(0.55 0.20 30);
-  --chart-4: oklch(0.70 0.15 80);
-  --chart-5: oklch(0.60 0.15 300);
-  
-  --radius: 1rem;                      /* Rounded corners */
-  
-  --sidebar: oklch(0.98 0 0);          /* Ultra light grey for sidebar */
-  --sidebar-foreground: oklch(0.14 0 0);
-  --sidebar-primary: oklch(0.14 0 0);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.94 0 0);
-  --sidebar-accent-foreground: oklch(0.14 0 0);
-  --sidebar-border: oklch(0.90 0 0);
-  --sidebar-ring: oklch(0.14 0 0);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #333333;
+  --sidebar-primary: #ffb606;
+  --sidebar-primary-foreground: #012237;
+  --sidebar-accent: #f4f6f9;
+  --sidebar-accent-foreground: #012237;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #ffb606;
 }
 
 .dark {
-  /* High Contrast Monochrome Dark Theme */
-  --background: oklch(0 0 0);          /* Pure Black #000000 */
-  --foreground: oklch(0.98 0 0);       /* Near White #fafafa */
-  --card: oklch(0.1 0 0);              /* Deep Dark Grey #1a1a1a */
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.1 0 0);
-  --popover-foreground: oklch(0.98 0 0);
+  /* Eduma Dark Theme */
+  --background: #01111c; /* Very deep navy for pure dark mode */
+  --foreground: #f4f6f9;
+  --card: #011826;
+  --card-foreground: #f4f6f9;
+  --popover: #011826;
+  --popover-foreground: #f4f6f9;
   
-  --primary: oklch(0.98 0 0);          /* White Primary */
-  --primary-foreground: oklch(0 0 0);  /* Black Text */
+  --primary: #ffb606; /* Gold */
+  --primary-foreground: #011826; /* Deep navy text on gold */
   
-  --secondary: oklch(0.15 0 0);        /* Neutral Dark Grey #262626 */
-  --secondary-foreground: oklch(0.98 0 0);
+  --secondary: #023859; /* Lighter navy */
+  --secondary-foreground: #ffffff;
   
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.65 0 0); /* Lighter Grey Muted */
+  --muted: #012237;
+  --muted-foreground: #94a3b8;
   
-  --accent: oklch(0.15 0 0);
-  --accent-foreground: oklch(0.98 0 0);
+  --accent: #023859;
+  --accent-foreground: #f4f6f9;
   
-  --destructive: oklch(0.62 0.20 25);
+  --destructive: #ef4444;
   
-  --border: oklch(0.2 0 0);            /* Subtle dark border #333333 */
-  --input: oklch(0.2 0 0);
-  --ring: oklch(0.98 0 0);
+  --border: #023859;
+  --input: #023859;
+  --ring: #ffb606;
   
-  --sidebar: oklch(0.05 0 0);          /* Almost black sidebar */
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.98 0 0);
-  --sidebar-primary-foreground: oklch(0 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.2 0 0);
-  --sidebar-ring: oklch(0.98 0 0);
+  --sidebar: #011826;
+  --sidebar-foreground: #f4f6f9;
+  --sidebar-primary: #ffb606;
+  --sidebar-primary-foreground: #011826;
+  --sidebar-accent: #023859;
+  --sidebar-accent-foreground: #f4f6f9;
+  --sidebar-border: #023859;
+  --sidebar-ring: #ffb606;
 }
 
 @layer base {

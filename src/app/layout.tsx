@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import "./globals.css";
@@ -7,12 +7,6 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-});
-
-const ibmPlexArabic = IBM_Plex_Sans_Arabic({
-  variable: "--font-urdu",
-  subsets: ["arabic"],
-  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${ibmPlexArabic.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <LanguageProvider>

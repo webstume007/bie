@@ -111,7 +111,7 @@ export default function NewClerkPage() {
           <div className="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
             <Button 
               type="submit" 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[140px]"
+              className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 min-w-[140px]"
               disabled={isPending}
             >
               {isPending ? (

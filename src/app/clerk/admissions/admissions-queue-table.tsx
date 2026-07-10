@@ -98,7 +98,7 @@ export default function AdmissionsQueueTable({ applications, centers }: { applic
                         <Button 
                           onClick={() => handleApprove(app.id)}
                           disabled={processingId === app.id || !selectedCenters[app.id]}
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                          className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950"
                         >
                           {processingId === app.id && <Loader2 className="mr-2 size-4 animate-spin" />}
                           Approve

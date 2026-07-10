@@ -48,7 +48,7 @@ export default async function InstituteEnrollmentsPage() {
               <Button variant="outline">Pending Actions</Button>
             </Link>
             <Link href="/institute/enrollments/new">
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950">
                 <Plus className="size-4 mr-2" />
                 Bulk Enroll
               </Button>

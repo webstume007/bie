@@ -128,7 +128,7 @@ export default function AuthPage() {
 
         {error && <div className="text-sm text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/10 rounded-md border border-red-100 dark:border-red-900/50">{error}</div>}
 
-        <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white" type="submit" disabled={loading}>
+        <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-neutral-950" type="submit" disabled={loading}>
           {loading ? t.loading : (mode === 'login' ? t.signInBtn : t.signUpBtn)}
         </Button>
       </form>

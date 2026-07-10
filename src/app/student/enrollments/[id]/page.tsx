@@ -69,7 +69,7 @@ export default async function EnrollmentDetailsPage({ params }: { params: { id: 
           </span>
           {app.status === 'APPROVED' && (
             <Link href={`/student/enrollments/${app.id}/slip`}>
-              <button className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
+              <button className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-neutral-950 rounded-lg text-sm font-medium transition-colors shadow-sm">
                 Download Slip
               </button>
             </Link>

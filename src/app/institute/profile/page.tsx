@@ -84,7 +84,7 @@ export default async function InstituteProfilePage() {
           </div>
 
           <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950">
               Save Changes
             </Button>
           </div>
