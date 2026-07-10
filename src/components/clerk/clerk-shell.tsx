@@ -7,8 +7,13 @@ import { LayoutDashboard, Wallet, Database, FileCheck, GraduationCap, LogOut, Me
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
+import { useTheme } from 'next-themes';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Sun, Moon } from 'lucide-react';
+
 export function ClerkShell({ children }: { children: React.ReactNode }) {
   const { language } = useLanguage();
+  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
@@ -48,23 +53,26 @@ export function ClerkShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
+      {/* Mobile Sidebar */}
       <aside className={`
-        fixed lg:static inset-y-0 ${language === 'ur' ? 'right-0' : 'left-0'} z-30
-        w-64 bg-white dark:bg-slate-900 border-${language === 'ur' ? 'l' : 'r'} border-slate-200 dark:border-slate-800
-        transform transition-transform duration-200 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : (language === 'ur' ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0')}
+        fixed inset-y-0 ${language === 'ur' ? 'right-0' : 'left-0'} z-50 lg:hidden
+        w-72 bg-card border-${language === 'ur' ? 'l' : 'r'} border-border
+        transform transition-transform duration-300 ease-in-out shadow-2xl
+        ${isSidebarOpen ? 'translate-x-0' : (language === 'ur' ? 'translate-x-full' : '-translate-x-full')}
         flex flex-col
       `}>
-        <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white truncate">
+        <div className="h-16 flex items-center px-6 border-b border-border bg-slate-950 dark:bg-black text-white">
+          <h1 className="text-xl font-bold truncate flex items-center gap-2">
+            <LayoutDashboard className="size-6 text-primary" />
             {t.clerkPanel}
           </h1>
         </div>
@@ -75,55 +83,46 @@ export function ClerkShell({ children }: { children: React.ReactNode }) {
             const isReallyActive = item.href === '/clerk' ? pathname === '/clerk' : isActive;
             
             return (
-               <Link
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`
-                  flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                  flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium transition-all
                   ${isReallyActive 
-                    ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' 
-                    : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50'}
+                    ? 'bg-primary text-primary-foreground shadow-md' 
+                    : 'text-foreground hover:bg-secondary/50 hover:text-primary'}
                 `}
                 onClick={() => setSidebarOpen(false)}
               >
-                <item.icon className={`size-5 ${isReallyActive ? 'text-indigo-700 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                <item.icon className={`size-5 ${isReallyActive ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
                 {item.name}
               </Link>
             )
           })}
         </nav>
-
-        <div className="p-4 border-t border-slate-200 dark:border-slate-800">
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 transition-colors"
-          >
-            <LogOut className="size-5" />
-            {t.logout}
-          </button>
-        </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 bg-neutral-950 dark:bg-black text-white border-b border-neutral-800 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+      {/* Header */}
+      <header className="h-16 bg-slate-950 dark:bg-black text-white flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-md z-30 sticky top-0">
+        <div className="flex items-center gap-4">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-2 text-neutral-400 hover:bg-neutral-800 rounded-lg dark:text-neutral-300 dark:hover:bg-neutral-900"
+            className="lg:hidden p-2 -ml-2 text-neutral-400 hover:text-white transition-colors"
           >
             <Menu className="size-6" />
           </button>
           
-          <div className="flex items-center gap-3 ml-2 lg:ml-0 rtl:mr-2 rtl:lg:mr-0">
+          <Link href="/clerk" className="flex items-center gap-3 rtl:mr-2 rtl:lg:mr-0 hover:opacity-80 transition-opacity">
             <img 
               src="/logo.webp" 
               alt="BIE" 
-              className="h-9 w-auto object-contain shrink-0" 
+              className="h-10 w-auto object-contain shrink-0 bg-white rounded-full p-0.5" 
               onError={(e) => { 
                 e.currentTarget.style.display = 'none'; 
                 const parent = e.currentTarget.parentElement;
                 if (parent && !parent.querySelector('.logo-fallback')) {
                   const fallback = document.createElement('div');
-                  fallback.className = 'logo-fallback size-9 rounded-full bg-indigo-100 dark:bg-indigo-950/50 flex items-center justify-center font-bold text-xs text-indigo-700 dark:text-indigo-300 shrink-0';
+                  fallback.className = 'logo-fallback size-10 rounded-full bg-primary flex items-center justify-center font-bold text-xs text-primary-foreground shrink-0';
                   fallback.innerText = 'BIE';
                   parent.insertBefore(fallback, e.currentTarget);
                 }
@@ -132,23 +131,63 @@ export function ClerkShell({ children }: { children: React.ReactNode }) {
             <img 
               src="/bie-logo.svg" 
               alt="BIE Title" 
-              className="h-6 w-auto object-contain invert" 
+              className="h-7 w-auto object-contain dark:brightness-0 dark:invert brightness-0 invert" 
             />
-          </div>
-          
-          <div className="flex-1"></div>
-          
-          <div className="flex items-center gap-4">
-            <div className="size-8 rounded-full bg-neutral-800 flex items-center justify-center text-white font-medium">
-              C
-            </div>
-          </div>
-        </header>
+          </Link>
+        </div>
 
-        <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {children}
-          </div>
+        {/* Desktop Navigation (Cute Buttons) */}
+        <nav className="hidden lg:flex items-center gap-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isReallyActive = item.href === '/clerk' ? pathname === '/clerk' : isActive;
+            
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`
+                  flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ease-out hover-lift
+                  ${isReallyActive 
+                    ? 'bg-primary text-primary-foreground shadow-md' 
+                    : 'text-neutral-300 hover:bg-white/10 hover:text-white'}
+                `}
+              >
+                <item.icon className="size-4" />
+                {item.name}
+              </Link>
+            )
+          })}
+        </nav>
+        
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="size-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          >
+            {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full">
+              <div className="size-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold hover:ring-2 hover:ring-white transition-all shadow-sm">
+                C
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 rounded-2xl p-2 shadow-xl border-border">
+              <DropdownMenuItem onClick={handleLogout} className="rounded-xl cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">
+                <LogOut className="size-4 mr-2" />
+                {t.logout}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 w-full">
+        <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {children}
         </div>
       </main>
     </div>
