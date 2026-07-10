@@ -32,6 +32,80 @@ export async function createSessionAction(state: any, formData: FormData) {
   redirect(`/backstage/sessions/${data.id}`);
 }
 
+export async function createFullSessionAction(payload: {
+  adYear: number;
+  ahYear: string;
+  type: string;
+  admissionOpenDate: string;
+  courses: {
+    courseId: number;
+    baseFee: number;
+    singleFeeDeadline: string;
+    doubleFeeDeadline: string;
+    tripleFeeDeadline: string;
+    subjects: {
+      subjectId: number;
+      totalMarks: number;
+      isCompulsory: boolean;
+    }[];
+  }[];
+}) {
+  const supabase = await createClient();
+
+  // 1. Insert Session
+  const { data: sessionData, error: sessionError } = await supabase.from('sessions').insert({
+    ad_year: payload.adYear,
+    ah_year: payload.ahYear,
+    type: payload.type,
+    admission_open_date: payload.admissionOpenDate,
+    is_active: true,
+  }).select('id').single();
+
+  if (sessionError) {
+    return { error: 'Failed to create session: ' + sessionError.message };
+  }
+
+  const sessionId = sessionData.id;
+
+  // 2. Loop through courses and insert
+  for (const course of payload.courses) {
+    const { data: sessionCourseData, error: courseError } = await supabase.from('session_courses').insert({
+      session_id: sessionId,
+      course_id: course.courseId,
+      base_fee: course.baseFee,
+      single_fee_deadline: course.singleFeeDeadline,
+      double_fee_deadline: course.doubleFeeDeadline,
+      triple_fee_deadline: course.tripleFeeDeadline,
+    }).select('id').single();
+
+    if (courseError) {
+      // Clean up the session if this fails? For simplicity, we just return error.
+      return { error: 'Failed to add course: ' + courseError.message };
+    }
+
+    const sessionCourseId = sessionCourseData.id;
+
+    // 3. Loop through subjects for this course and insert
+    if (course.subjects && course.subjects.length > 0) {
+      const subjectInserts = course.subjects.map(sub => ({
+        session_course_id: sessionCourseId,
+        subject_id: sub.subjectId,
+        total_marks: sub.totalMarks,
+        is_compulsory: sub.isCompulsory,
+      }));
+
+      const { error: subjectError } = await supabase.from('session_course_subjects').insert(subjectInserts);
+      
+      if (subjectError) {
+        return { error: 'Failed to add subjects: ' + subjectError.message };
+      }
+    }
+  }
+
+  revalidatePath('/backstage/sessions');
+  return { success: true };
+}
+
 export async function deleteSessionAction(sessionId: string) {
   const supabase = await createClient();
   const { error } = await supabase.from('sessions').delete().eq('id', sessionId);
