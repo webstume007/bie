@@ -47,3 +47,29 @@ export async function createClerkAction(state: any, formData: FormData) {
   revalidatePath('/backstage/clerks');
   return { success: true };
 }
+
+export async function approveAdmissionAction(applicationId: string, examCenterId: string) {
+  // Use our server client for regular authenticated requests
+  const { createClient: createServerClient } = await import('@/lib/supabase/server');
+  const supabase = await createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Not authenticated' };
+
+  // Generate a random roll number for now (in production, use sequence or format like YEAR-DEGREE-XXXX)
+  const rollNo = `2026-SAN-${Math.floor(10000 + Math.random() * 90000)}`;
+
+  const { error } = await supabase
+    .from('exam_applications')
+    .update({ 
+      status: 'APPROVED',
+      exam_center_id: examCenterId,
+      assigned_roll_no: rollNo
+    })
+    .eq('id', applicationId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath('/clerk/admissions');
+  return { success: true };
+}
