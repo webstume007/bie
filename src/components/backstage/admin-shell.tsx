@@ -161,6 +161,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </nav>
         
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center justify-center px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-bold tracking-wider mr-2">
+            ADMIN
+          </div>
           <LanguageSwitcher />
           <ThemeToggle />
 

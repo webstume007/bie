@@ -161,6 +161,9 @@ export function ClerkShell({ children }: { children: React.ReactNode }) {
         </nav>
         
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center justify-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold tracking-wider mr-2">
+            CLERK
+          </div>
           <LanguageSwitcher />
           <ThemeToggle />
 

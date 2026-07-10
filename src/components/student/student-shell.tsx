@@ -160,6 +160,9 @@ export function StudentShell({ children }: { children: React.ReactNode }) {
         </nav>
         
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center justify-center px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-wider mr-2">
+            STUDENT
+          </div>
           <LanguageSwitcher />
           <ThemeToggle />
 
