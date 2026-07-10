@@ -14,14 +14,14 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="size-9 rounded-full bg-white/10 flex items-center justify-center text-white" />
+      <div className="size-9 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-slate-700 dark:text-slate-300" />
     );
   }
 
   return (
     <button 
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="size-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+      className="size-9 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors"
       title="Toggle Theme"
     >
       {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
