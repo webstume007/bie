@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Nastaliq_Urdu } from "next/font/google";
+import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import "./globals.css";
@@ -9,10 +9,10 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const notoUrdu = Noto_Nastaliq_Urdu({
-  variable: "--font-noto-urdu",
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
+  variable: "--font-urdu",
   subsets: ["arabic"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${notoUrdu.variable} h-full antialiased`}
+      className={`${inter.variable} ${ibmPlexArabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <LanguageProvider>

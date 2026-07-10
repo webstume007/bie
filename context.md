@@ -18,7 +18,13 @@ A modern, secure, and real-time educational management portal designed for an Is
 
 ### 1.4 UI/UX & Frontend Guidelines
 * **Core Libraries:** `shadcn/ui` and Tailwind CSS for accessible, responsive, and professional UI components.
-* **Apple & Google UI Inspired Design:** The design system uses premium off-white/charcoal light mode and slate dark mode backgrounds, increased card corner radii (`rounded-2xl` / `1rem`), high contrast text colors, and subtle micro-interactions/transitions.
+* **Apple & Google UI Inspired Design:** The design system uses premium pure white (`#ffffff`) light mode and pure black (`#000000`) or deep zinc dark mode backgrounds.
+  - High contrast monochrome aesthetic (stark blacks/whites).
+  - Minimalistic, ultra-thin borders and soft diffused shadows instead of heavy boxes.
+  - Increased card corner radii (`rounded-2xl` / `1rem`), subtle micro-interactions/transitions.
+* **Typography:**
+  - **Primary (English):** `Inter` for clean, modern English typography.
+  - **Urdu (Specialized):** `IBM Plex Sans Arabic` loaded natively via `next/font/google` and applied via a custom `font-urdu` Tailwind class to ensure all Urdu text renders beautifully without breaking layouts.
 * **Brand Logo Header:** The main header of all dashboard views displays the official `logo.webp` alongside `bie-logo.svg` (for the title), including a CSS fallback element if `logo.webp` is missing.
 * **Auth Page Experience:** Integrate `Three.js` on the login/signup pages to render a 3D, interactive Islamic-themed environment (e.g., desert landscape, date palm trees, greenery).
 * **Form Draft Persistence (useFormDraft):** Forms use the custom `useFormDraft` hook which automatically:
