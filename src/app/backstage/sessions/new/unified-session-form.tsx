@@ -9,23 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Plus, Trash2, ArrowLeft, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
 
-interface Course {
-  id: number;
-  name: string;
-  base_fee: number;
-}
+interface UnifiedSessionFormProps {}
 
-interface Subject {
-  id: number;
-  name: string;
-}
-
-interface UnifiedSessionFormProps {
-  availableCourses: Course[];
-  availableSubjects: Subject[];
-}
-
-export default function UnifiedSessionForm({ availableCourses, availableSubjects }: UnifiedSessionFormProps) {
+export default function UnifiedSessionForm({}: UnifiedSessionFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +22,9 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
     ahYear: '',
     type: 'regular',
     admissionOpenDate: '',
+    singleFeeDate: '',
+    doubleFeeDate: '',
+    tripleFeeDate: '',
   });
 
   // Dynamic courses state
@@ -46,11 +35,11 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
       ...courses,
       {
         uid: Date.now().toString(), // unique id for iteration
-        courseId: '',
-        baseFee: '',
-        singleFeeDeadline: '',
-        doubleFeeDeadline: '',
-        tripleFeeDeadline: '',
+        courseName: '',
+        singleFee: '',
+        doubleFee: '',
+        tripleFee: '',
+        mandatoryCount: '0',
         subjects: [],
       },
     ]);
@@ -64,15 +53,7 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
     setCourses(
       courses.map((c) => {
         if (c.uid === uid) {
-          // Auto-fill base fee if course is selected
-          let extra = {};
-          if (field === 'courseId' && value) {
-            const courseRef = availableCourses.find(ac => ac.id.toString() === value.toString());
-            if (courseRef && !c.baseFee) {
-              extra = { baseFee: courseRef.base_fee || 0 };
-            }
-          }
-          return { ...c, [field]: value, ...extra };
+          return { ...c, [field]: value };
         }
         return c;
       })
@@ -89,7 +70,7 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
               ...c.subjects,
               {
                 uid: Date.now().toString() + Math.random().toString(),
-                subjectId: '',
+                subjectName: '',
                 totalMarks: 100,
                 isCompulsory: true,
               },
@@ -140,8 +121,8 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
     setError(null);
 
     // Validate payload
-    if (!sessionData.adYear || !sessionData.ahYear || !sessionData.admissionOpenDate) {
-      setError('Please fill all session details');
+    if (!sessionData.adYear || !sessionData.ahYear || !sessionData.admissionOpenDate || !sessionData.singleFeeDate || !sessionData.doubleFeeDate || !sessionData.tripleFeeDate) {
+      setError('Please fill all session details including fee deadlines.');
       setIsSubmitting(false);
       return;
     }
@@ -151,14 +132,17 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
       ahYear: sessionData.ahYear,
       type: sessionData.type,
       admissionOpenDate: sessionData.admissionOpenDate,
+      singleFeeDate: sessionData.singleFeeDate,
+      doubleFeeDate: sessionData.doubleFeeDate,
+      tripleFeeDate: sessionData.tripleFeeDate,
       courses: courses.map(c => ({
-        courseId: parseInt(c.courseId),
-        baseFee: parseFloat(c.baseFee),
-        singleFeeDeadline: c.singleFeeDeadline,
-        doubleFeeDeadline: c.doubleFeeDeadline,
-        tripleFeeDeadline: c.tripleFeeDeadline,
+        courseName: c.courseName,
+        singleFee: parseFloat(c.singleFee) || 0,
+        doubleFee: parseFloat(c.doubleFee) || 0,
+        tripleFee: parseFloat(c.tripleFee) || 0,
+        mandatoryCount: parseInt(c.mandatoryCount) || 0,
         subjects: c.subjects.map((s: any) => ({
-          subjectId: parseInt(s.subjectId),
+          subjectName: s.subjectName,
           totalMarks: parseInt(s.totalMarks),
           isCompulsory: s.isCompulsory === true || s.isCompulsory === 'true',
         }))
@@ -210,7 +194,7 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
 
       {/* SESSION DETAILS */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-4">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">Session Details</h3>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">Session Details & Deadlines</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Year in AD (e.g. 2026)</Label>
@@ -225,7 +209,7 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
             <select
               value={sessionData.type}
               onChange={e => setSessionData({...sessionData, type: e.target.value})}
-              className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+              className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="regular">Regular</option>
               <option value="supply">Supplementary</option>
@@ -234,6 +218,19 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
           <div className="space-y-2">
             <Label>Admission Open Date</Label>
             <Input type="date" required value={sessionData.admissionOpenDate} onChange={e => setSessionData({...sessionData, admissionOpenDate: e.target.value})} />
+          </div>
+          
+          <div className="space-y-2">
+            <Label>Single Fee Deadline</Label>
+            <Input type="date" required value={sessionData.singleFeeDate} onChange={e => setSessionData({...sessionData, singleFeeDate: e.target.value})} />
+          </div>
+          <div className="space-y-2">
+            <Label>Double Fee Deadline</Label>
+            <Input type="date" required value={sessionData.doubleFeeDate} onChange={e => setSessionData({...sessionData, doubleFeeDate: e.target.value})} />
+          </div>
+          <div className="space-y-2">
+            <Label>Triple Fee Deadline</Label>
+            <Input type="date" required value={sessionData.tripleFeeDate} onChange={e => setSessionData({...sessionData, tripleFeeDate: e.target.value})} />
           </div>
         </div>
       </div>
@@ -263,36 +260,38 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
             </div>
             
             <div className="p-4 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Select Course</Label>
-                  <select
-                    required
-                    value={course.courseId}
-                    onChange={e => handleCourseChange(course.uid, 'courseId', e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
-                  >
-                    <option value="">-- Select Course --</option>
-                    {availableCourses.map(ac => (
-                      <option key={ac.id} value={ac.id}>{ac.name}</option>
-                    ))}
-                  </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-2 lg:col-span-2">
+                  <Label>Course Name</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="e.g. Aalim"
+                    required 
+                    value={course.courseName} 
+                    onChange={e => handleCourseChange(course.uid, 'courseName', e.target.value)} 
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label>Base Fee</Label>
-                  <Input type="number" required value={course.baseFee} onChange={e => handleCourseChange(course.uid, 'baseFee', e.target.value)} />
+                  <Label>Mandatory Selective Subjects Count</Label>
+                  <Input 
+                    type="number" 
+                    min="0"
+                    required 
+                    value={course.mandatoryCount} 
+                    onChange={e => handleCourseChange(course.uid, 'mandatoryCount', e.target.value)} 
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label>Single Fee Deadline</Label>
-                  <Input type="date" required value={course.singleFeeDeadline} onChange={e => handleCourseChange(course.uid, 'singleFeeDeadline', e.target.value)} />
+                  <Label>Single Fee</Label>
+                  <Input type="number" required value={course.singleFee} onChange={e => handleCourseChange(course.uid, 'singleFee', e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Double Fee Deadline</Label>
-                  <Input type="date" required value={course.doubleFeeDeadline} onChange={e => handleCourseChange(course.uid, 'doubleFeeDeadline', e.target.value)} />
+                  <Label>Double Fee</Label>
+                  <Input type="number" required value={course.doubleFee} onChange={e => handleCourseChange(course.uid, 'doubleFee', e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Triple Fee Deadline</Label>
-                  <Input type="date" required value={course.tripleFeeDeadline} onChange={e => handleCourseChange(course.uid, 'tripleFeeDeadline', e.target.value)} />
+                  <Label>Triple Fee</Label>
+                  <Input type="number" required value={course.tripleFee} onChange={e => handleCourseChange(course.uid, 'tripleFee', e.target.value)} />
                 </div>
               </div>
 
@@ -310,21 +309,18 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
                 )}
 
                 <div className="space-y-3">
-                  {course.subjects.map((subject: any, sIdx: number) => (
+                  {course.subjects.map((subject: any) => (
                     <div key={subject.uid} className="flex flex-col sm:flex-row items-end gap-3 bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
                       <div className="w-full sm:flex-1 space-y-1">
-                        <Label className="text-xs">Select Subject</Label>
-                        <select
-                          required
-                          value={subject.subjectId}
-                          onChange={e => handleSubjectChange(course.uid, subject.uid, 'subjectId', e.target.value)}
-                          className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-md bg-transparent text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:text-white"
-                        >
-                          <option value="">-- Select Subject --</option>
-                          {availableSubjects.map(as => (
-                            <option key={as.id} value={as.id}>{as.name}</option>
-                          ))}
-                        </select>
+                        <Label className="text-xs">Subject Name</Label>
+                        <Input 
+                          type="text" 
+                          placeholder="e.g. Fiqh"
+                          required 
+                          value={subject.subjectName} 
+                          onChange={e => handleSubjectChange(course.uid, subject.uid, 'subjectName', e.target.value)} 
+                          className="h-8 text-sm"
+                        />
                       </div>
                       <div className="w-full sm:w-24 space-y-1">
                         <Label className="text-xs">Total Marks</Label>
@@ -335,7 +331,7 @@ export default function UnifiedSessionForm({ availableCourses, availableSubjects
                         <select
                           value={subject.isCompulsory ? 'true' : 'false'}
                           onChange={e => handleSubjectChange(course.uid, subject.uid, 'isCompulsory', e.target.value === 'true')}
-                          className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-md bg-transparent text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:text-white"
+                          className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         >
                           <option value="true">Compulsory</option>
                           <option value="false">Selective</option>

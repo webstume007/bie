@@ -37,14 +37,17 @@ export async function createFullSessionAction(payload: {
   ahYear: string;
   type: string;
   admissionOpenDate: string;
+  singleFeeDate: string;
+  doubleFeeDate: string;
+  tripleFeeDate: string;
   courses: {
-    courseId: number;
-    baseFee: number;
-    singleFeeDeadline: string;
-    doubleFeeDeadline: string;
-    tripleFeeDeadline: string;
+    courseName: string;
+    singleFee: number;
+    doubleFee: number;
+    tripleFee: number;
+    mandatoryCount: number;
     subjects: {
-      subjectId: number;
+      subjectName: string;
       totalMarks: number;
       isCompulsory: boolean;
     }[];
@@ -58,6 +61,9 @@ export async function createFullSessionAction(payload: {
     ah_year: payload.ahYear,
     type: payload.type,
     admission_open_date: payload.admissionOpenDate,
+    single_fee_date: payload.singleFeeDate,
+    double_fee_date: payload.doubleFeeDate,
+    triple_fee_date: payload.tripleFeeDate,
     is_active: true,
   }).select('id').single();
 
@@ -67,37 +73,67 @@ export async function createFullSessionAction(payload: {
 
   const sessionId = sessionData.id;
 
-  // 2. Loop through courses and insert
+  // 2. Loop through courses
   for (const course of payload.courses) {
+    // 2a. Lookup or insert course
+    let courseId: number;
+    const { data: existingCourse } = await supabase.from('courses').select('id').ilike('name', course.courseName).maybeSingle();
+    
+    if (existingCourse) {
+      courseId = existingCourse.id;
+    } else {
+      const { data: newCourse, error: createCourseErr } = await supabase.from('courses').insert({
+        name: course.courseName,
+        base_fee: 0,
+      }).select('id').single();
+      if (createCourseErr) return { error: 'Failed to create course: ' + createCourseErr.message };
+      courseId = newCourse.id;
+    }
+
+    // 2b. Insert session course
     const { data: sessionCourseData, error: courseError } = await supabase.from('session_courses').insert({
       session_id: sessionId,
-      course_id: course.courseId,
-      base_fee: course.baseFee,
-      single_fee_deadline: course.singleFeeDeadline,
-      double_fee_deadline: course.doubleFeeDeadline,
-      triple_fee_deadline: course.tripleFeeDeadline,
+      course_id: courseId,
+      single_fee: course.singleFee,
+      double_fee: course.doubleFee,
+      triple_fee: course.tripleFee,
+      mandatory_electives_count: course.mandatoryCount,
     }).select('id').single();
 
     if (courseError) {
-      // Clean up the session if this fails? For simplicity, we just return error.
-      return { error: 'Failed to add course: ' + courseError.message };
+      return { error: 'Failed to link course: ' + courseError.message };
     }
 
     const sessionCourseId = sessionCourseData.id;
 
-    // 3. Loop through subjects for this course and insert
+    // 3. Loop through subjects for this course
     if (course.subjects && course.subjects.length > 0) {
-      const subjectInserts = course.subjects.map(sub => ({
-        session_course_id: sessionCourseId,
-        subject_id: sub.subjectId,
-        total_marks: sub.totalMarks,
-        is_compulsory: sub.isCompulsory,
-      }));
+      for (const sub of course.subjects) {
+        // 3a. Lookup or insert subject
+        let subjectId: number;
+        const { data: existingSub } = await supabase.from('subjects').select('id').ilike('name', sub.subjectName).maybeSingle();
 
-      const { error: subjectError } = await supabase.from('session_course_subjects').insert(subjectInserts);
-      
-      if (subjectError) {
-        return { error: 'Failed to add subjects: ' + subjectError.message };
+        if (existingSub) {
+          subjectId = existingSub.id;
+        } else {
+          const { data: newSub, error: createSubErr } = await supabase.from('subjects').insert({
+            name: sub.subjectName,
+          }).select('id').single();
+          if (createSubErr) return { error: 'Failed to create subject: ' + createSubErr.message };
+          subjectId = newSub.id;
+        }
+
+        // 3b. Insert session course subject
+        const { error: subjectError } = await supabase.from('session_course_subjects').insert({
+          session_course_id: sessionCourseId,
+          subject_id: subjectId,
+          total_marks: sub.totalMarks,
+          is_compulsory: sub.isCompulsory,
+        });
+
+        if (subjectError) {
+          return { error: 'Failed to add subject: ' + subjectError.message };
+        }
       }
     }
   }
