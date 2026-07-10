@@ -9,7 +9,8 @@ import { createClient } from '@/lib/supabase/client';
 
 import { useTheme } from 'next-themes';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Sun, Moon } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export function InstituteShell({ children }: { children: React.ReactNode }) {
   const { language } = useLanguage();
@@ -105,7 +106,7 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Header */}
-      <header className="h-16 bg-slate-950 dark:bg-black text-white flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-md z-30 sticky top-0">
+      <header className="h-16 bg-slate-950 dark:bg-slate-900 text-white flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-md z-30 sticky top-0">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -163,12 +164,8 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
         </nav>
         
         <div className="flex items-center gap-3">
-          <button 
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="size-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-          >
-            {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
-          </button>
+          <LanguageSwitcher />
+          <ThemeToggle />
 
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full">

@@ -174,8 +174,10 @@
   html {
     @apply font-sans scroll-smooth;
   }
+  .font-urdu, .font-urdu * {
+    font-family: var(--font-urdu) !important;
+  }
   .font-urdu {
-    font-family: var(--font-urdu);
     direction: rtl;
   }
 }

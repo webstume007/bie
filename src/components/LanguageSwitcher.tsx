@@ -1,20 +1,17 @@
 'use client';
 
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
+    <button
       onClick={() => setLanguage(language === 'en' ? 'ur' : 'en')}
-      className="fixed bottom-6 right-6 z-50 font-medium shadow-lg rounded-full px-4"
+      className="size-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors text-xs font-bold"
       title={language === 'en' ? 'Switch to Urdu' : 'Switch to English'}
     >
-      {language === 'en' ? 'اردو' : 'English'}
-    </Button>
+      {language === 'en' ? 'UR' : 'EN'}
+    </button>
   );
 }

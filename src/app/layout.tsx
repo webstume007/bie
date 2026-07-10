@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeOnboardingModal } from "@/components/ThemeOnboardingModal";
 import "./globals.css";
@@ -36,7 +35,6 @@ export default function RootLayout({
         >
           <LanguageProvider>
             <ThemeOnboardingModal />
-            <LanguageSwitcher />
             {children}
           </LanguageProvider>
         </ThemeProvider>
