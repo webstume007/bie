@@ -52,7 +52,7 @@ export default async function NewEnrollmentPage() {
               You must complete your profile with your personal details and a passport-size photograph before you can apply for an exam.
             </p>
             <div className="mt-4">
-              <Link 
+              <Link
                 href="/student/profile"
                 className="inline-flex items-center justify-center px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
@@ -72,9 +72,9 @@ export default async function NewEnrollmentPage() {
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Select an active session and degree to apply as a Private Candidate.</p>
       </div>
 
-      <EnrollmentForm 
-        sessions={sessions || []} 
-        degrees={degrees || []} 
+      <EnrollmentForm
+        sessions={sessions || []}
+        degrees={degrees || []}
       />
     </div>
   );
