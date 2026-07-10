@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, ArrowRight, BookOpen, CalendarClock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-const initialState = {
+const initialState: any = {
   error: '',
   success: false,
   trackingId: '',

@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useRouter } from 'next/navigation';
 
-const initialState = {
+const initialState: any = {
   error: '',
   success: false,
 };
@@ -20,7 +20,7 @@ export default function NewClerkPage() {
   const router = useRouter();
 
   // Protect form data
-  const { draft, updateDraft, clearDraft } = useFormDraft('new_clerk_form', {
+  const { values, handleChange, clearDraft } = useFormDraft('new_clerk_form', {
     fullName: '',
     cnic: '',
     email: '',
@@ -63,8 +63,8 @@ export default function NewClerkPage() {
                 id="fullName" 
                 name="fullName" 
                 placeholder="e.g. Ali Ahmed" 
-                value={draft.fullName}
-                onChange={(e) => updateDraft({ fullName: e.target.value })}
+                value={values.fullName}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -75,8 +75,8 @@ export default function NewClerkPage() {
                 id="cnic" 
                 name="cnic" 
                 placeholder="00000-0000000-0" 
-                value={draft.cnic}
-                onChange={(e) => updateDraft({ cnic: e.target.value })}
+                value={values.cnic}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -88,8 +88,8 @@ export default function NewClerkPage() {
                 name="email" 
                 type="email" 
                 placeholder="staff@board.edu.pk" 
-                value={draft.email}
-                onChange={(e) => updateDraft({ email: e.target.value })}
+                value={values.email}
+                onChange={handleChange}
                 required 
               />
             </div>

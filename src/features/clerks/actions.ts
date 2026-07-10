@@ -3,7 +3,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
 
-export async function createClerkAction(formData: FormData) {
+export async function createClerkAction(state: any, formData: FormData) {
   const cnic = formData.get('cnic') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;

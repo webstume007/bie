@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export async function createSessionAction(formData: FormData) {
+export async function createSessionAction(state: any, formData: FormData) {
   const name = formData.get('name') as string;
   const year = parseInt(formData.get('year') as string);
   const type = formData.get('type') as string; // 'regular' or 'supply'
@@ -37,7 +37,7 @@ export async function createSessionAction(formData: FormData) {
   return { success: true };
 }
 
-export async function createDegreeAction(formData: FormData) {
+export async function createDegreeAction(state: any, formData: FormData) {
   const name = formData.get('name') as string;
   const level = formData.get('level') as string;
   const normalFee = parseInt(formData.get('normalFee') as string);

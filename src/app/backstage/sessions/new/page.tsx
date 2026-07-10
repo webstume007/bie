@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useRouter } from 'next/navigation';
 
-const initialState = {
+const initialState: any = {
   error: '',
   success: false,
 };
@@ -19,7 +19,7 @@ export default function NewSessionPage() {
   const [state, formAction, isPending] = useActionState(createSessionAction, initialState);
   const router = useRouter();
 
-  const { draft, updateDraft, clearDraft } = useFormDraft('new_session_form', {
+  const { values, handleChange, clearDraft } = useFormDraft('new_session_form', {
     name: '',
     year: new Date().getFullYear().toString(),
     type: 'regular',
@@ -66,8 +66,8 @@ export default function NewSessionPage() {
                 id="name" 
                 name="name" 
                 placeholder="e.g. Annual 2026" 
-                value={draft.name}
-                onChange={(e) => updateDraft({ name: e.target.value })}
+                value={values.name}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -78,8 +78,8 @@ export default function NewSessionPage() {
                 id="year" 
                 name="year" 
                 type="number"
-                value={draft.year}
-                onChange={(e) => updateDraft({ year: e.target.value })}
+                value={values.year}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -89,8 +89,8 @@ export default function NewSessionPage() {
               <select
                 id="type"
                 name="type"
-                value={draft.type}
-                onChange={(e) => updateDraft({ type: e.target.value })}
+                value={values.type}
+                onChange={handleChange}
                 className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 required
               >
@@ -109,8 +109,8 @@ export default function NewSessionPage() {
                   id="enrollmentStartDate" 
                   name="enrollmentStartDate" 
                   type="date"
-                  value={draft.enrollmentStartDate}
-                  onChange={(e) => updateDraft({ enrollmentStartDate: e.target.value })}
+                  value={values.enrollmentStartDate}
+                  onChange={handleChange}
                   required 
                 />
               </div>
@@ -121,8 +121,8 @@ export default function NewSessionPage() {
                   id="normalFeeDeadline" 
                   name="normalFeeDeadline" 
                   type="date"
-                  value={draft.normalFeeDeadline}
-                  onChange={(e) => updateDraft({ normalFeeDeadline: e.target.value })}
+                  value={values.normalFeeDeadline}
+                  onChange={handleChange}
                   required 
                 />
               </div>
@@ -133,8 +133,8 @@ export default function NewSessionPage() {
                   id="lateFeeDeadline" 
                   name="lateFeeDeadline" 
                   type="date"
-                  value={draft.lateFeeDeadline}
-                  onChange={(e) => updateDraft({ lateFeeDeadline: e.target.value })}
+                  value={values.lateFeeDeadline}
+                  onChange={handleChange}
                   required 
                 />
               </div>
@@ -145,8 +145,8 @@ export default function NewSessionPage() {
                   id="doubleFeeDeadline" 
                   name="doubleFeeDeadline" 
                   type="date"
-                  value={draft.doubleFeeDeadline}
-                  onChange={(e) => updateDraft({ doubleFeeDeadline: e.target.value })}
+                  value={values.doubleFeeDeadline}
+                  onChange={handleChange}
                   required 
                 />
               </div>

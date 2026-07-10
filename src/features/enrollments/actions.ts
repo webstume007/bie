@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
-export async function submitEnrollmentAction(formData: FormData) {
+export async function submitEnrollmentAction(state: any, formData: FormData) {
   const sessionId = formData.get('sessionId') as string;
   const degreeId = formData.get('degreeId') as string;
   const isPrivate = formData.get('isPrivate') === 'true'; // Regular student will be submitted by Institute in next phase

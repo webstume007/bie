@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useRouter } from 'next/navigation';
 
-const initialState = {
+const initialState: any = {
   error: '',
   success: false,
 };
@@ -19,7 +19,7 @@ export default function NewDegreePage() {
   const [state, formAction, isPending] = useActionState(createDegreeAction, initialState);
   const router = useRouter();
 
-  const { draft, updateDraft, clearDraft } = useFormDraft('new_degree_form', {
+  const { values, handleChange, clearDraft } = useFormDraft('new_degree_form', {
     name: '',
     level: '',
     normalFee: '',
@@ -64,8 +64,8 @@ export default function NewDegreePage() {
                 id="name" 
                 name="name" 
                 placeholder="e.g. Sanviya Aama" 
-                value={draft.name}
-                onChange={(e) => updateDraft({ name: e.target.value })}
+                value={values.name}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -76,8 +76,8 @@ export default function NewDegreePage() {
                 id="level" 
                 name="level" 
                 placeholder="e.g. Matric / Intermediate"
-                value={draft.level}
-                onChange={(e) => updateDraft({ level: e.target.value })}
+                value={values.level}
+                onChange={handleChange}
                 required 
               />
             </div>
@@ -93,8 +93,8 @@ export default function NewDegreePage() {
                   name="normalFee" 
                   type="number"
                   placeholder="2500"
-                  value={draft.normalFee}
-                  onChange={(e) => updateDraft({ normalFee: e.target.value })}
+                  value={values.normalFee}
+                  onChange={handleChange}
                   required 
                 />
               </div>
@@ -106,8 +106,8 @@ export default function NewDegreePage() {
                   name="lateFee" 
                   type="number"
                   placeholder="3500"
-                  value={draft.lateFee}
-                  onChange={(e) => updateDraft({ lateFee: e.target.value })}
+                  value={values.lateFee}
+                  onChange={handleChange}
                   required 
                 />
               </div>
@@ -119,8 +119,8 @@ export default function NewDegreePage() {
                   name="doubleFee" 
                   type="number"
                   placeholder="5000"
-                  value={draft.doubleFee}
-                  onChange={(e) => updateDraft({ doubleFee: e.target.value })}
+                  value={values.doubleFee}
+                  onChange={handleChange}
                   required 
                 />
               </div>
