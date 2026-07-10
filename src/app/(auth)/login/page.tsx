@@ -1,21 +1,71 @@
 'use client';
 
 import { useState } from 'react';
-import { loginAction } from '@/features/auth/actions';
+import { loginAction, signupAction } from '@/features/auth/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function AuthPage() {
+  const { language } = useLanguage();
+  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const t = {
+    en: {
+      signIn: 'Sign In',
+      signUp: 'Sign Up',
+      loginTitle: 'Welcome back',
+      loginDesc: 'Enter your credentials to access your account',
+      signupTitle: 'Create an account',
+      signupDesc: 'Enter your details to register as a student or institute',
+      role: 'I am registering as',
+      roleStudent: 'Student / Parent',
+      roleInstitute: 'Institute (Madrasa)',
+      cnic: 'CNIC Number',
+      cnicPlaceholder: 'XXXXX-XXXXXXX-X',
+      email: 'Email address',
+      password: 'Password',
+      forgotPassword: 'Forgot password?',
+      signInBtn: 'Sign In',
+      signUpBtn: 'Create Account',
+      loading: 'Please wait...',
+    },
+    ur: {
+      signIn: 'سائن ان',
+      signUp: 'سائن اپ',
+      loginTitle: 'خوش آمدید',
+      loginDesc: 'اپنے اکاؤنٹ تک رسائی کے لیے اپنی تفصیلات درج کریں',
+      signupTitle: 'اکاؤنٹ بنائیں',
+      signupDesc: 'طالب علم یا ادارے کے طور پر رجسٹر کرنے کے لیے اپنی تفصیلات درج کریں',
+      role: 'میں رجسٹر کر رہا ہوں بطور',
+      roleStudent: 'طالب علم / سرپرست',
+      roleInstitute: 'ادارہ (مدرسہ)',
+      cnic: 'شناختی کارڈ نمبر',
+      cnicPlaceholder: 'XXXXX-XXXXXXX-X',
+      email: 'ای میل ایڈریس',
+      password: 'پاس ورڈ',
+      forgotPassword: 'پاس ورڈ بھول گئے؟',
+      signInBtn: 'سائن ان کریں',
+      signUpBtn: 'اکاؤنٹ بنائیں',
+      loading: 'براہ کرم انتظار کریں...',
+    }
+  }[language];
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
-    const result = await loginAction(formData);
+    
+    let result;
+    if (mode === 'login') {
+      result = await loginAction(formData);
+    } else {
+      result = await signupAction(formData);
+    }
+    
     if (result?.error) {
       setError(result.error);
     }
@@ -23,44 +73,86 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="border-0 shadow-none bg-transparent">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>
-          Enter your CNIC and password to sign in to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form action={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="cnic">CNIC</Label>
-            <Input id="cnic" name="cnic" placeholder="XXXXX-XXXXXXX-X" required />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <Link href="/reset-password" className="text-sm text-muted-foreground hover:text-primary">
-                Forgot password?
-              </Link>
-            </div>
-            <Input id="password" name="password" type="password" required />
-          </div>
-          
-          {error && <div className="text-sm text-red-500 font-medium">{error}</div>}
+    <div className="w-full">
+      {/* Custom Tabs */}
+      <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mb-6">
+        <button
+          onClick={() => { setMode('login'); setError(null); }}
+          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
+            mode === 'login' 
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' 
+              : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+          }`}
+        >
+          {t.signIn}
+        </button>
+        <button
+          onClick={() => { setMode('signup'); setError(null); }}
+          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${
+            mode === 'signup' 
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' 
+              : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+          }`}
+        >
+          {t.signUp}
+        </button>
+      </div>
 
-          <Button className="w-full" type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
-          </Button>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <p className="text-sm text-muted-foreground text-center w-full">
-          Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-primary hover:underline font-medium">
-            Sign up
-          </Link>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          {mode === 'login' ? t.loginTitle : t.signupTitle}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          {mode === 'login' ? t.loginDesc : t.signupDesc}
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+
+      <form action={handleSubmit} className="space-y-4">
+        {mode === 'signup' && (
+          <div className="space-y-2">
+            <Label htmlFor="role">{t.role}</Label>
+            <select
+              id="role"
+              name="role"
+              className="flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              required
+            >
+              <option value="student">{t.roleStudent}</option>
+              <option value="institute">{t.roleInstitute}</option>
+            </select>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <Label htmlFor="cnic">{t.cnic}</Label>
+          <Input id="cnic" name="cnic" placeholder={t.cnicPlaceholder} required className="h-10" />
+        </div>
+
+        {mode === 'signup' && (
+          <div className="space-y-2">
+            <Label htmlFor="email">{t.email}</Label>
+            <Input id="email" name="email" type="email" placeholder="m@example.com" required className="h-10" />
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">{t.password}</Label>
+            {mode === 'login' && (
+              <Link href="/reset-password" className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                {t.forgotPassword}
+              </Link>
+            )}
+          </div>
+          <Input id="password" name="password" type="password" required className="h-10" />
+        </div>
+        
+        {error && <div className="text-sm text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/10 rounded-md border border-red-100 dark:border-red-900/50">{error}</div>}
+
+        <Button className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white" type="submit" disabled={loading}>
+          {loading ? t.loading : (mode === 'login' ? t.signInBtn : t.signUpBtn)}
+        </Button>
+      </form>
+    </div>
   );
 }

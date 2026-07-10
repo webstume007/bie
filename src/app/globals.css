@@ -127,4 +127,7 @@
   html {
     @apply font-sans;
   }
+  html.font-urdu {
+    font-family: var(--font-noto-urdu), serif;
+  }
 }
