@@ -3,6 +3,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Wallet, Database, FileCheck, GraduationCap } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ClerkDashboard() {
   const { language } = useLanguage();
@@ -35,10 +36,10 @@ export default function ClerkDashboard() {
   }[language];
 
   const modules = [
-    { title: t.finance, description: t.financeDesc, icon: Wallet, color: 'text-emerald-600 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-900/50' },
-    { title: t.dataEntry, description: t.dataEntryDesc, icon: Database, color: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/50' },
-    { title: t.admissions, description: t.admissionsDesc, icon: FileCheck, color: 'text-indigo-600 bg-indigo-100 dark:text-indigo-400 dark:bg-indigo-900/50' },
-    { title: t.results, description: t.resultsDesc, icon: GraduationCap, color: 'text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/50' },
+    { title: t.finance, description: t.financeDesc, icon: Wallet, color: 'text-emerald-600 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-900/50', href: '/clerk/finance' },
+    { title: t.dataEntry, description: t.dataEntryDesc, icon: Database, color: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/50', href: '/clerk/data-entry' },
+    { title: t.admissions, description: t.admissionsDesc, icon: FileCheck, color: 'text-indigo-600 bg-indigo-100 dark:text-indigo-400 dark:bg-indigo-900/50', href: '/clerk/admissions' },
+    { title: t.results, description: t.resultsDesc, icon: GraduationCap, color: 'text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/50', href: '/clerk/results' },
   ];
 
   return (
@@ -54,17 +55,19 @@ export default function ClerkDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {modules.map((mod, index) => (
-          <Card key={index} className="hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
-              <div className={`p-3 rounded-xl ${mod.color}`}>
-                <mod.icon className="size-6" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <CardTitle className="text-lg mb-2">{mod.title}</CardTitle>
-              <CardDescription>{mod.description}</CardDescription>
-            </CardContent>
-          </Card>
+          <Link href={mod.href} key={index} className="block group">
+            <Card className="h-full hover:shadow-md hover:border-neutral-400 dark:hover:border-neutral-600 transition-all">
+              <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
+                <div className={`p-3 rounded-xl transition-colors ${mod.color.replace('bg-', 'group-hover:bg-opacity-80 bg-')}`}>
+                  <mod.icon className="size-6" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <CardTitle className="text-lg mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{mod.title}</CardTitle>
+                <CardDescription>{mod.description}</CardDescription>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

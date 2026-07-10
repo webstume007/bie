@@ -112,10 +112,10 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className="h-16 bg-neutral-950 dark:bg-black text-white border-b border-neutral-800 flex items-center justify-between px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-lg dark:text-slate-300 dark:hover:bg-slate-800"
+            className="lg:hidden p-2 -ml-2 text-neutral-400 hover:bg-neutral-800 rounded-lg dark:text-neutral-300 dark:hover:bg-neutral-900"
           >
             <Menu className="size-6" />
           </button>
@@ -139,14 +139,14 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
             <img 
               src="/bie-logo.svg" 
               alt="BIE Title" 
-              className="h-6 w-auto object-contain dark:invert" 
+              className="h-6 w-auto object-contain invert" 
             />
           </div>
           
           <div className="flex-1"></div>
           
           <div className="flex items-center gap-4">
-            <div className="size-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-medium">
+            <div className="size-8 rounded-full bg-neutral-800 flex items-center justify-center text-white font-medium">
               IP
             </div>
           </div>
