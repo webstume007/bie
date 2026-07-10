@@ -11,7 +11,7 @@ export default async function SessionsPage() {
   const { data: sessions, error } = await supabase
     .from('sessions')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
 
   return (
     <div className="space-y-6">

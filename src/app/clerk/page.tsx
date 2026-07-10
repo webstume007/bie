@@ -55,16 +55,9 @@ export default function ClerkDashboard() {
           <div className="z-10 p-4 rounded-2xl mb-4 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 self-start">
             <Wallet className="size-8" />
           </div>
-          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white mt-auto">
             {t.finance}
           </h3>
-          <p className="z-10 text-sm text-slate-500 dark:text-slate-400 mt-2 flex-grow">
-            {t.financeDesc}
-          </p>
-          <div className="z-10 mt-4 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-            <span>{t.accessText}</span>
-            <ArrowRight className="size-4 rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-          </div>
         </Link>
 
         {/* Data Entry Card */}
@@ -73,16 +66,9 @@ export default function ClerkDashboard() {
           <div className="z-10 p-4 rounded-2xl mb-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 self-start">
             <Database className="size-8" />
           </div>
-          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white mt-auto">
             {t.dataEntry}
           </h3>
-          <p className="z-10 text-sm text-slate-500 dark:text-slate-400 mt-2 flex-grow">
-            {t.dataEntryDesc}
-          </p>
-          <div className="z-10 mt-4 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            <span>{t.accessText}</span>
-            <ArrowRight className="size-4 rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-          </div>
         </Link>
 
         {/* Admissions Card */}
@@ -91,16 +77,9 @@ export default function ClerkDashboard() {
           <div className="z-10 p-4 rounded-2xl mb-4 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 self-start">
             <FileCheck className="size-8" />
           </div>
-          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white mt-auto">
             {t.admissions}
           </h3>
-          <p className="z-10 text-sm text-slate-500 dark:text-slate-400 mt-2 flex-grow">
-            {t.admissionsDesc}
-          </p>
-          <div className="z-10 mt-4 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-            <span>{t.accessText}</span>
-            <ArrowRight className="size-4 rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-          </div>
         </Link>
 
         {/* Results Card */}
@@ -109,40 +88,11 @@ export default function ClerkDashboard() {
           <div className="z-10 p-4 rounded-2xl mb-4 bg-purple-500/10 text-purple-600 dark:text-purple-400 self-start">
             <GraduationCap className="size-8" />
           </div>
-          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="z-10 text-lg font-bold text-slate-900 dark:text-white mt-auto">
             {t.results}
           </h3>
-          <p className="z-10 text-sm text-slate-500 dark:text-slate-400 mt-2 flex-grow">
-            {t.resultsDesc}
-          </p>
-          <div className="z-10 mt-4 flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-            <span>{t.accessText}</span>
-            <ArrowRight className="size-4 rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
-          </div>
         </Link>
         
-        {/* Switch Portals Card */}
-        <Link href="/" className="group flex flex-col p-6 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden sm:col-span-2 lg:col-span-4 mt-4">
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-slate-200/50 dark:bg-slate-800/50 blur-2xl z-0" />
-          <div className="z-10 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                <LogOut className="size-6" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                  {language === 'en' ? 'Other Portals' : 'دیگر پورٹلز'}
-                </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {language === 'en' ? 'Return to main landing page.' : 'مین پیج پر واپس جائیں۔'}
-                </p>
-              </div>
-            </div>
-            <div className="z-10 flex items-center justify-center size-10 rounded-full bg-white dark:bg-slate-800 shadow-sm group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-slate-900 transition-colors">
-              <ArrowRight className="size-5 rtl:rotate-180" />
-            </div>
-          </div>
-        </Link>
 
       </div>
     </div>

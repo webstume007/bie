@@ -26,6 +26,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       settings: 'Settings',
       logout: 'Logout',
       adminPanel: 'Super Admin',
+      sessions: 'Sessions',
     },
     ur: {
       dashboard: 'ڈیش بورڈ',
@@ -35,11 +36,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       settings: 'ترتیبات',
       logout: 'لاگ آؤٹ',
       adminPanel: 'سپر ایڈمن',
+      sessions: 'سیشنز',
     }
   }[language];
 
   const navItems = [
     { name: t.dashboard, href: '/backstage', icon: LayoutDashboard },
+    { name: t.sessions, href: '/backstage/sessions', icon: FileText }, // Added Sessions
     { name: t.institutes, href: '/backstage/institutes', icon: Building2 },
     { name: t.users, href: '/backstage/users', icon: Users },
     { name: t.reports, href: '/backstage/reports', icon: FileText },
@@ -100,6 +103,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             )
           })}
         </nav>
+        
+        <div className="p-4 border-t border-border flex flex-row items-center justify-around">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </aside>
 
       {/* Header */}
@@ -161,11 +169,15 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </nav>
         
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center justify-center px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-bold tracking-wider mr-2">
+          <div className="flex items-center justify-center px-3 py-1 rounded-full bg-rose-500 text-white text-xs font-bold tracking-wider lg:mr-2 shadow-sm">
             ADMIN
           </div>
-          <LanguageSwitcher />
-          <ThemeToggle />
+          <div className="hidden lg:block">
+            <LanguageSwitcher />
+          </div>
+          <div className="hidden lg:block">
+            <ThemeToggle />
+          </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full">

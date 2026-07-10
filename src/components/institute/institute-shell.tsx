@@ -103,6 +103,11 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
             )
           })}
         </nav>
+        
+        <div className="p-4 border-t border-border flex flex-row items-center justify-around">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </aside>
 
       {/* Header */}
@@ -164,16 +169,20 @@ export function InstituteShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold tracking-wider mr-2">
+          <div className="flex items-center justify-center px-3 py-1 rounded-full bg-indigo-500 text-white text-xs font-bold tracking-wider lg:mr-2 shadow-sm">
             INSTITUTE
           </div>
-          <LanguageSwitcher />
-          <ThemeToggle />
+          <div className="hidden lg:block">
+            <LanguageSwitcher />
+          </div>
+          <div className="hidden lg:block">
+            <ThemeToggle />
+          </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full">
-              <div className="size-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold hover:ring-2 hover:ring-white transition-all shadow-sm">
-                I
+              <div className="size-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold hover:ring-2 hover:ring-white transition-all shadow-sm overflow-hidden">
+                 <UserCircle className="size-full text-primary-foreground/80" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 rounded-2xl p-2 shadow-xl border-border">
