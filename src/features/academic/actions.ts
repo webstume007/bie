@@ -32,6 +32,18 @@ export async function createSessionAction(state: any, formData: FormData) {
   redirect(`/backstage/sessions/${data.id}`);
 }
 
+export async function deleteSessionAction(sessionId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('sessions').delete().eq('id', sessionId);
+  
+  if (error) {
+    return { error: error.message };
+  }
+  
+  revalidatePath('/backstage/sessions');
+  return { success: true };
+}
+
 export async function createCourseAction(state: any, formData: FormData) {
   const name = formData.get('name') as string;
   const level = formData.get('level') as string;

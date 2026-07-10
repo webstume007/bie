@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Plus, Search, CalendarClock } from 'lucide-react';
+import { Plus, Search, CalendarClock, Settings, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const revalidate = 0;
@@ -82,9 +82,23 @@ export default async function SessionsPage() {
                     {session.admission_open_date ? new Date(session.admission_open_date).toLocaleDateString() : 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <Link href={`/backstage/sessions/${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">
-                      Manage Configuration
-                    </Link>
+                    <div className="flex items-center justify-end gap-3">
+                      <Link href={`/backstage/sessions/${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm flex items-center gap-1">
+                        <Settings className="size-4" />
+                        Manage
+                      </Link>
+                      
+                      <form action={async () => {
+                        'use server';
+                        const { deleteSessionAction } = await import('@/features/academic/actions');
+                        await deleteSessionAction(session.id.toString());
+                      }}>
+                        <button type="submit" className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm flex items-center gap-1">
+                          <Trash2 className="size-4" />
+                          Delete
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               ))}
