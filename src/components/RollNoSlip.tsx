@@ -65,8 +65,8 @@ export function RollNoSlip({ application }: RollNoSlipProps) {
           </div>
 
           <div>
-            <p className="text-sm text-neutral-500 mb-1">Degree Program</p>
-            <p className="text-base font-bold">{application.degrees?.name}</p>
+            <p className="text-sm text-neutral-500 mb-1">Course Program</p>
+            <p className="text-base font-bold">{application.courses?.name}</p>
           </div>
           <div>
             <p className="text-sm text-neutral-500 mb-1">Candidate Type</p>

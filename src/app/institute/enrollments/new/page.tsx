@@ -26,9 +26,9 @@ export default async function InstituteBulkEnrollPage() {
     .eq('is_active', true)
     .order('year', { ascending: false });
 
-  // Fetch degrees
-  const { data: degrees } = await supabase
-    .from('degrees')
+  // Fetch courses
+  const { data: courses } = await supabase
+    .from('courses')
     .select('*')
     .order('name');
 
@@ -43,7 +43,7 @@ export default async function InstituteBulkEnrollPage() {
     <InstituteShell>
       <BulkEnrollWizard 
         sessions={sessions || []} 
-        degrees={degrees || []} 
+        courses={courses || []} 
         students={students || []} 
       />
     </InstituteShell>

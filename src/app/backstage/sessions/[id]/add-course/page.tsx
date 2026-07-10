@@ -45,10 +45,10 @@ export default function AddCourseToSessionPage({ params }: { params: { id: strin
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="degreeId">Course (Degree) ID</Label>
+              <Label htmlFor="courseId">Course (Course) ID</Label>
               <Input 
-                id="degreeId" 
-                name="degreeId" 
+                id="courseId" 
+                name="courseId" 
                 type="number"
                 placeholder="Enter the ID of the course" 
                 required 

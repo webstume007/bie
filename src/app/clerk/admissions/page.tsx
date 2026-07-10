@@ -32,7 +32,7 @@ export default async function ClerkAdmissionsPage() {
       created_at,
       is_private,
       sessions ( name, year ),
-      degrees ( name ),
+      courses ( name ),
       students ( full_name, father_name, b_form_cnic ),
       institute_students ( full_name, father_name ),
       institutes ( name )

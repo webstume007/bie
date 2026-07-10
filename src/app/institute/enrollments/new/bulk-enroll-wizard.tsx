@@ -12,14 +12,14 @@ import { bulkEnrollAction } from '@/features/institute/actions';
 
 type WizardProps = {
   sessions: any[];
-  degrees: any[];
+  courses: any[];
   students: any[];
 };
 
-export default function BulkEnrollWizard({ sessions, degrees, students }: WizardProps) {
+export default function BulkEnrollWizard({ sessions, courses, students }: WizardProps) {
   const router = useRouter();
   const [sessionId, setSessionId] = useState<string>('');
-  const [degreeId, setDegreeId] = useState<string>('');
+  const [courseId, setCourseId] = useState<string>('');
   const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,8 +40,8 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
   };
 
   const handleSubmit = async () => {
-    if (!sessionId || !degreeId || selectedStudentIds.size === 0) {
-      setError('Please select a session, degree, and at least one student.');
+    if (!sessionId || !courseId || selectedStudentIds.size === 0) {
+      setError('Please select a session, course, and at least one student.');
       return;
     }
 
@@ -50,7 +50,7 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
 
     const formData = new FormData();
     formData.append('sessionId', sessionId);
-    formData.append('degreeId', degreeId);
+    formData.append('courseId', courseId);
     formData.append('studentIds', Array.from(selectedStudentIds).join(','));
 
     const res = await bulkEnrollAction(null, formData);
@@ -102,13 +102,13 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
           </div>
 
           <div className="space-y-3">
-            <Label className="text-base">2. Select Degree</Label>
-            <Select value={degreeId} onValueChange={(val) => setDegreeId(val || '')}>
+            <Label className="text-base">2. Select Course</Label>
+            <Select value={courseId} onValueChange={(val) => setCourseId(val || '')}>
               <SelectTrigger className="bg-neutral-50 dark:bg-neutral-950">
-                <SelectValue placeholder="Choose a degree program" />
+                <SelectValue placeholder="Choose a course program" />
               </SelectTrigger>
               <SelectContent>
-                {degrees.map(d => (
+                {courses.map(d => (
                   <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
                 ))}
               </SelectContent>
@@ -177,7 +177,7 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
           <Button 
             onClick={handleSubmit} 
             className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950" 
-            disabled={isPending || selectedStudentIds.size === 0 || !sessionId || !degreeId}
+            disabled={isPending || selectedStudentIds.size === 0 || !sessionId || !courseId}
           >
             {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
             Enroll {selectedStudentIds.size > 0 ? selectedStudentIds.size : ''} Students

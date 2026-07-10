@@ -23,7 +23,7 @@ export default async function InstituteBulkSlipsPage() {
     .select(`
       *,
       sessions ( name, year ),
-      degrees ( name ),
+      courses ( name ),
       institute_students ( full_name, father_name, profile_picture_url ),
       exam_centers ( name, location ),
       institutes ( name )

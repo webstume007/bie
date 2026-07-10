@@ -56,12 +56,12 @@ export async function bulkEnrollAction(state: any, formData: FormData) {
   if (!institute) return { error: 'Institute profile not found' };
 
   const sessionId = formData.get('sessionId') as string;
-  const degreeId = formData.get('degreeId') as string;
+  const courseId = formData.get('courseId') as string;
   // We expect studentIds as a comma-separated string or multiple entries
   const studentIdsStr = formData.get('studentIds') as string;
 
-  if (!sessionId || !degreeId || !studentIdsStr) {
-    return { error: 'Please select a session, degree, and at least one student.' };
+  if (!sessionId || !courseId || !studentIdsStr) {
+    return { error: 'Please select a session, course, and at least one student.' };
   }
 
   const studentIds = studentIdsStr.split(',');
@@ -71,14 +71,14 @@ export async function bulkEnrollAction(state: any, formData: FormData) {
     .from('exam_applications')
     .select('institute_student_id')
     .eq('session_id', sessionId)
-    .eq('degree_id', degreeId)
+    .eq('course_id', courseId)
     .in('institute_student_id', studentIds);
 
   const existingIds = new Set(existing?.map(e => e.institute_student_id) || []);
   const newStudentIds = studentIds.filter(id => !existingIds.has(id));
 
   if (newStudentIds.length === 0) {
-    return { error: 'All selected students are already enrolled in this session and degree.' };
+    return { error: 'All selected students are already enrolled in this session and course.' };
   }
 
   const timestamp = Date.now().toString().slice(-6);
@@ -87,7 +87,7 @@ export async function bulkEnrollAction(state: any, formData: FormData) {
     student_id: user.id, // Using institute user ID as the owner
     institute_student_id: studentId,
     session_id: sessionId,
-    degree_id: degreeId,
+    course_id: courseId,
     institute_id: institute.id,
     is_private: false,
     status: 'SUBMITTED',
@@ -114,7 +114,7 @@ export async function generateBulkChallanAction(applicationIds: string[]) {
     .select(`
       id,
       sessions ( normal_fee_date, late_fee_date, double_fee_date ),
-      degrees ( base_fee, late_fee, double_fee )
+      courses ( base_fee, late_fee, double_fee )
     `)
     .in('id', applicationIds);
 
@@ -124,7 +124,7 @@ export async function generateBulkChallanAction(applicationIds: string[]) {
 
   for (const app of apps) {
     const session = app.sessions as any;
-    const degree = app.degrees as any;
+    const course = app.courses as any;
 
     const deadlines = {
       normalFeeDeadline: session.normal_fee_date,
@@ -137,7 +137,7 @@ export async function generateBulkChallanAction(applicationIds: string[]) {
       return { error: 'One or more applications have passed the final deadline.' };
     }
 
-    const amount = calculateFeeAmount(tier, degree.base_fee, degree.late_fee, degree.double_fee);
+    const amount = calculateFeeAmount(tier, course.base_fee, course.late_fee, course.double_fee);
     totalAmount += amount;
   }
 

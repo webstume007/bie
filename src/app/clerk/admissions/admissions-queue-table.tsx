@@ -43,7 +43,7 @@ export default function AdmissionsQueueTable({ applications, centers }: { applic
             <thead className="bg-neutral-50 dark:bg-neutral-800/50 text-neutral-500 dark:text-neutral-400 font-medium">
               <tr>
                 <th className="px-6 py-4">Student</th>
-                <th className="px-6 py-4">Session & Degree</th>
+                <th className="px-6 py-4">Session & Course</th>
                 <th className="px-6 py-4">Type</th>
                 <th className="px-6 py-4 w-64">Assign Exam Center</th>
                 <th className="px-6 py-4 text-right">Action</th>
@@ -72,7 +72,7 @@ export default function AdmissionsQueueTable({ applications, centers }: { applic
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-neutral-900 dark:text-white">{app.sessions?.name} {app.sessions?.year}</div>
-                        <div className="text-xs text-neutral-500">{app.degrees?.name}</div>
+                        <div className="text-xs text-neutral-500">{app.courses?.name}</div>
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300">

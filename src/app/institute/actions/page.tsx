@@ -27,7 +27,7 @@ export default async function InstituteActionsPage() {
       tracking_id,
       created_at,
       sessions ( name, year ),
-      degrees ( name, base_fee ),
+      courses ( name, base_fee ),
       institute_students ( full_name, father_name )
     `)
     .eq('institute_id', institute.id)

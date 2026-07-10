@@ -30,7 +30,7 @@ export default async function ClerkFinancePage() {
           id,
           tracking_id,
           sessions ( name ),
-          degrees ( name )
+          courses ( name )
         )
       )
     `)
@@ -101,7 +101,7 @@ export default async function ClerkFinancePage() {
                         <div className="font-medium text-neutral-900 dark:text-white mt-0.5">Rs. {challan.amount}</div>
                       </td>
                       <td className="px-6 py-4 text-neutral-600 dark:text-neutral-300">
-                        <div className="truncate max-w-[150px]" title={enrollment?.degrees?.name}>{enrollment?.degrees?.name}</div>
+                        <div className="truncate max-w-[150px]" title={enrollment?.courses?.name}>{enrollment?.courses?.name}</div>
                         <div className="text-xs text-neutral-500 mt-0.5">{enrollment?.sessions?.name}</div>
                       </td>
                       <td className="px-6 py-4">

@@ -14,7 +14,7 @@ const initialState: any = {
   success: false,
 };
 
-export default function AddSubjectToCoursePage({ params }: { params: { id: string, sessionDegreeId: string } }) {
+export default function AddSubjectToCoursePage({ params }: { params: { id: string, sessionCourseId: string } }) {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(addSubjectToSessionCourseAction, initialState);
 
@@ -22,7 +22,7 @@ export default function AddSubjectToCoursePage({ params }: { params: { id: strin
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
         <Link 
-          href={`/backstage/sessions/${params.id}/course/${params.sessionDegreeId}`}
+          href={`/backstage/sessions/${params.id}/course/${params.sessionCourseId}`}
           className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         >
           <ArrowLeft className="size-5" />
@@ -35,7 +35,7 @@ export default function AddSubjectToCoursePage({ params }: { params: { id: strin
 
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <form action={formAction} className="p-6 space-y-6">
-          <input type="hidden" name="sessionDegreeId" value={params.sessionDegreeId} />
+          <input type="hidden" name="sessionCourseId" value={params.sessionCourseId} />
           <input type="hidden" name="sessionId" value={params.id} />
 
           {state?.error && (

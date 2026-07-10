@@ -10,13 +10,13 @@ export async function generateChallanAction(applicationId: string) {
 
   if (!user) return { error: 'Not authenticated' };
 
-  // 1. Fetch Application with Session and Degree details
+  // 1. Fetch Application with Session and Course details
   const { data: app, error: appError } = await supabase
     .from('exam_applications')
     .select(`
       *,
       sessions ( normal_fee_date, late_fee_date, double_fee_date ),
-      degrees ( base_fee, late_fee, double_fee )
+      courses ( base_fee, late_fee, double_fee )
     `)
     .eq('id', applicationId)
     .single();
@@ -48,10 +48,10 @@ export async function generateChallanAction(applicationId: string) {
     return { error: 'The deadline for generating a challan has passed.' };
   }
 
-  // Note: in Degrees table we used normalFee, lateFee, doubleFee.
-  const normalFee = app.degrees.normalFee || app.degrees.base_fee;
-  const lateFee = app.degrees.lateFee || app.degrees.late_fee;
-  const doubleFee = app.degrees.doubleFee || app.degrees.double_fee;
+  // Note: in Courses table we used normalFee, lateFee, doubleFee.
+  const normalFee = app.courses.normalFee || app.courses.base_fee;
+  const lateFee = app.courses.lateFee || app.courses.late_fee;
+  const doubleFee = app.courses.doubleFee || app.courses.double_fee;
 
   const amount = calculateFeeAmount(tier, normalFee, lateFee, doubleFee);
   const psid = generatePSID();

@@ -20,13 +20,13 @@ interface Session {
   type: string;
 }
 
-interface Degree {
+interface Course {
   id: string;
   name: string;
   level: string;
 }
 
-export function EnrollmentForm({ sessions, degrees }: { sessions: Session[], degrees: Degree[] }) {
+export function EnrollmentForm({ sessions, courses }: { sessions: Session[], courses: Course[] }) {
   const [state, formAction, isPending] = useActionState(submitEnrollmentAction, initialState);
   const router = useRouter();
 
@@ -86,31 +86,31 @@ export function EnrollmentForm({ sessions, degrees }: { sessions: Session[], deg
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">
             <BookOpen className="size-5 text-indigo-600 dark:text-indigo-400" />
-            <h3>2. Degree Program</h3>
+            <h3>2. Course Program</h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {degrees.length === 0 ? (
+            {courses.length === 0 ? (
               <p className="text-sm text-slate-500">No programs available.</p>
             ) : (
-              degrees.map((degree) => (
+              courses.map((course) => (
                 <label 
-                  key={degree.id} 
+                  key={course.id} 
                   className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/10 cursor-pointer transition-colors has-[:checked]:border-indigo-600 dark:has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-500/10"
                 >
                   <input 
                     type="radio" 
-                    name="degreeId" 
-                    value={degree.id} 
+                    name="courseId" 
+                    value={course.id} 
                     className="mt-1 size-4 text-indigo-600 focus:ring-indigo-500" 
                     required 
                   />
                   <div>
                     <div className="font-medium text-slate-900 dark:text-white">
-                      {degree.name}
+                      {course.name}
                     </div>
                     <div className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                      Level: {degree.level}
+                      Level: {course.level}
                     </div>
                   </div>
                 </label>
@@ -129,7 +129,7 @@ export function EnrollmentForm({ sessions, degrees }: { sessions: Session[], deg
           <Button 
             type="submit" 
             className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 min-w-[160px] h-11 text-base"
-            disabled={isPending || sessions.length === 0 || degrees.length === 0}
+            disabled={isPending || sessions.length === 0 || courses.length === 0}
           >
             {isPending ? (
               <>

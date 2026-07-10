@@ -6,33 +6,33 @@ import { notFound } from 'next/navigation';
 
 export const revalidate = 0;
 
-export default async function SessionCourseSubjectsPage({ params }: { params: { id: string, sessionDegreeId: string } }) {
+export default async function SessionCourseSubjectsPage({ params }: { params: { id: string, sessionCourseId: string } }) {
   const supabase = await createClient();
   
-  // Fetch session degree info
-  const { data: sessionDegree, error } = await supabase
-    .from('session_degrees')
+  // Fetch session course info
+  const { data: sessionCourse, error } = await supabase
+    .from('session_courses')
     .select(`
       id,
-      degrees ( name, mandatory_electives_count )
+      courses ( name, mandatory_electives_count )
     `)
-    .eq('id', params.sessionDegreeId)
+    .eq('id', params.sessionCourseId)
     .single();
 
-  if (error || !sessionDegree) {
+  if (error || !sessionCourse) {
     notFound();
   }
 
-  // Fetch subjects linked to this session degree
+  // Fetch subjects linked to this session course
   const { data: sessionSubjects } = await supabase
-    .from('session_degree_subjects')
+    .from('session_course_subjects')
     .select(`
       id,
       is_compulsory,
       total_marks,
       subjects ( id, name )
     `)
-    .eq('session_degree_id', sessionDegree.id);
+    .eq('session_course_id', sessionCourse.id);
 
   return (
     <div className="space-y-6">
@@ -48,7 +48,7 @@ export default async function SessionCourseSubjectsPage({ params }: { params: { 
             Manage Subjects
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            For course: <span className="font-semibold">{(sessionDegree.degrees as any).name}</span>
+            For course: <span className="font-semibold">{(sessionCourse.courses as any).name}</span>
           </p>
         </div>
       </div>
@@ -59,7 +59,7 @@ export default async function SessionCourseSubjectsPage({ params }: { params: { 
           <p className="text-xs text-slate-500 dark:text-slate-400">Students must select this many elective subjects.</p>
         </div>
         <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400">
-          {(sessionDegree.degrees as any).mandatory_electives_count}
+          {(sessionCourse.courses as any).mandatory_electives_count}
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export default async function SessionCourseSubjectsPage({ params }: { params: { 
           <Book className="size-5 text-indigo-500" />
           Subjects Curriculum
         </h3>
-        <Link href={`/backstage/sessions/${params.id}/course/${params.sessionDegreeId}/add-subject`}>
+        <Link href={`/backstage/sessions/${params.id}/course/${params.sessionCourseId}/add-subject`}>
           <Button className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2">
             <Plus className="size-4" />
             Add Subject

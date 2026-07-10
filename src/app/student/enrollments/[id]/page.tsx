@@ -20,7 +20,7 @@ export default async function EnrollmentDetailsPage({ params }: { params: { id: 
     .select(`
       *,
       sessions ( id, name, year, type, normal_fee_date, late_fee_date, double_fee_date ),
-      degrees ( id, name, level, base_fee, late_fee, double_fee ),
+      courses ( id, name, level, base_fee, late_fee, double_fee ),
       institutes ( name )
     `)
     .eq('id', params.id)
@@ -98,10 +98,10 @@ export default async function EnrollmentDetailsPage({ params }: { params: { id: 
             Program Details
           </div>
           <div className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            {app.degrees.name}
+            {app.courses.name}
           </div>
           <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-            Level: {app.degrees.level} • {app.is_private ? 'Private Candidate' : `Regular (${app.institutes?.name})`}
+            Level: {app.courses.level} • {app.is_private ? 'Private Candidate' : `Regular (${app.institutes?.name})`}
           </div>
         </div>
       </div>

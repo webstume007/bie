@@ -30,9 +30,9 @@ export default async function NewEnrollmentPage() {
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
-  // 3. Fetch Degrees
-  const { data: degrees } = await supabase
-    .from('degrees')
+  // 3. Fetch Courses
+  const { data: courses } = await supabase
+    .from('courses')
     .select('id, name, level')
     .order('created_at', { ascending: false });
 
@@ -69,12 +69,12 @@ export default async function NewEnrollmentPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Exam Application</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Select an active session and degree to apply as a Private Candidate.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Select an active session and course to apply as a Private Candidate.</p>
       </div>
 
       <EnrollmentForm
         sessions={sessions || []}
-        degrees={degrees || []}
+        courses={courses || []}
       />
     </div>
   );

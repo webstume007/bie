@@ -13,7 +13,7 @@ export default async function StudentSlipPage({ params }: { params: { id: string
     .select(`
       *,
       sessions ( name, year ),
-      degrees ( name ),
+      courses ( name ),
       students ( full_name, father_name, profile_image_url ),
       exam_centers ( name, location )
     `)

@@ -5,11 +5,11 @@ import { revalidatePath } from 'next/cache';
 
 export async function submitEnrollmentAction(state: any, formData: FormData) {
   const sessionId = formData.get('sessionId') as string;
-  const degreeId = formData.get('degreeId') as string;
+  const courseId = formData.get('courseId') as string;
   const isPrivate = formData.get('isPrivate') === 'true'; // Regular student will be submitted by Institute in next phase
 
-  if (!sessionId || !degreeId) {
-    return { error: 'Please select a session and degree.' };
+  if (!sessionId || !courseId) {
+    return { error: 'Please select a session and course.' };
   }
 
   const supabase = await createClient();
@@ -39,7 +39,7 @@ export async function submitEnrollmentAction(state: any, formData: FormData) {
   const { error: insertError } = await supabase.from('exam_applications').insert({
     student_id: user.id,
     session_id: sessionId,
-    degree_id: degreeId,
+    course_id: courseId,
     is_private: isPrivate,
     tracking_id: trackingId,
     status: 'SUBMITTED', // Or DRAFT if we implement save-and-resume
@@ -48,7 +48,7 @@ export async function submitEnrollmentAction(state: any, formData: FormData) {
 
   if (insertError) {
     if (insertError.code === '23505') { // Unique violation
-      return { error: 'You have already applied for this session and degree.' };
+      return { error: 'You have already applied for this session and course.' };
     }
     return { error: insertError.message };
   }

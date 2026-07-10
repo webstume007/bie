@@ -20,7 +20,7 @@ export default async function StudentEnrollmentsPage() {
       status,
       tracking_id,
       sessions ( name ),
-      degrees ( name ),
+      courses ( name ),
       institutes ( name )
     `)
     .eq('student_id', user.id)
@@ -47,7 +47,7 @@ export default async function StudentEnrollmentsPage() {
             <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium">
               <tr>
                 <th className="px-6 py-4">Session</th>
-                <th className="px-6 py-4">Degree</th>
+                <th className="px-6 py-4">Course</th>
                 <th className="px-6 py-4">Type</th>
                 <th className="px-6 py-4">Roll No.</th>
                 <th className="px-6 py-4">Status</th>
@@ -82,7 +82,7 @@ export default async function StudentEnrollmentsPage() {
 
               {!error && enrollments?.map((enrollment: any) => {
                 const sessionName = enrollment.sessions?.name || 'Unknown Session';
-                const degreeName = enrollment.degrees?.name || 'Unknown Degree';
+                const courseName = enrollment.courses?.name || 'Unknown Course';
                 const isRegular = !enrollment.is_private;
 
                 return (
@@ -91,7 +91,7 @@ export default async function StudentEnrollmentsPage() {
                       {sessionName}
                     </td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
-                      {degreeName}
+                      {courseName}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">

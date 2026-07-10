@@ -107,7 +107,7 @@ export function ChallanSection({ application, challan }: { application: any, cha
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Program</p>
-                    <p className="font-semibold">{application.degrees.name}</p>
+                    <p className="font-semibold">{application.courses.name}</p>
                   </div>
                 </div>
                 

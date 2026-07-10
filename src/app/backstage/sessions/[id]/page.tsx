@@ -19,17 +19,17 @@ export default async function SessionDetailsPage({ params }: { params: { id: str
     notFound();
   }
 
-  // Fetch courses (degrees) linked to this session
-  const { data: sessionDegrees } = await supabase
-    .from('session_degrees')
+  // Fetch courses (courses) linked to this session
+  const { data: sessionCourses } = await supabase
+    .from('session_courses')
     .select(`
       id,
       base_fee,
       single_fee_deadline,
       double_fee_deadline,
       triple_fee_deadline,
-      degree_id,
-      degrees ( id, name, mandatory_electives_count )
+      course_id,
+      courses ( id, name, mandatory_electives_count )
     `)
     .eq('session_id', session.id);
 
@@ -93,7 +93,7 @@ export default async function SessionDetailsPage({ params }: { params: { id: str
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        {(!sessionDegrees || sessionDegrees.length === 0) ? (
+        {(!sessionCourses || sessionCourses.length === 0) ? (
           <div className="bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-12 text-center">
             <BookOpen className="size-12 mx-auto text-slate-400 opacity-50 mb-3" />
             <p className="text-lg font-medium text-slate-900 dark:text-white">No courses added yet</p>
@@ -102,11 +102,11 @@ export default async function SessionDetailsPage({ params }: { params: { id: str
             </p>
           </div>
         ) : (
-          sessionDegrees.map((sd) => (
+          sessionCourses.map((sd) => (
             <div key={sd.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
               <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start">
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">{(sd.degrees as any).name}</h4>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">{(sd.courses as any).name}</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Base Fee: <span className="font-semibold text-slate-700 dark:text-slate-300">Rs. {sd.base_fee}</span>
                   </p>

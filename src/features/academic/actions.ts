@@ -32,7 +32,7 @@ export async function createSessionAction(state: any, formData: FormData) {
   redirect(`/backstage/sessions/${data.id}`);
 }
 
-export async function createDegreeAction(state: any, formData: FormData) {
+export async function createCourseAction(state: any, formData: FormData) {
   const name = formData.get('name') as string;
   const level = formData.get('level') as string;
   const normalFee = parseInt(formData.get('normalFee') as string);
@@ -45,7 +45,7 @@ export async function createDegreeAction(state: any, formData: FormData) {
 
   const supabase = await createClient();
 
-  const { error } = await supabase.from('degrees').insert({
+  const { error } = await supabase.from('courses').insert({
     name,
     level,
     normal_fee: normalFee,
@@ -57,27 +57,27 @@ export async function createDegreeAction(state: any, formData: FormData) {
     return { error: error.message };
   }
 
-  revalidatePath('/backstage/degrees');
+  revalidatePath('/backstage/courses');
   return { success: true };
 }
 
 export async function addCourseToSessionAction(state: any, formData: FormData) {
   const sessionId = formData.get('sessionId') as string;
-  const degreeId = parseInt(formData.get('degreeId') as string);
+  const courseId = parseInt(formData.get('courseId') as string);
   const baseFee = parseFloat(formData.get('baseFee') as string);
   const singleFeeDeadline = formData.get('singleFeeDeadline') as string;
   const doubleFeeDeadline = formData.get('doubleFeeDeadline') as string;
   const tripleFeeDeadline = formData.get('tripleFeeDeadline') as string;
 
-  if (!sessionId || isNaN(degreeId) || isNaN(baseFee) || !singleFeeDeadline || !doubleFeeDeadline || !tripleFeeDeadline) {
+  if (!sessionId || isNaN(courseId) || isNaN(baseFee) || !singleFeeDeadline || !doubleFeeDeadline || !tripleFeeDeadline) {
     return { error: 'All fields are required' };
   }
 
   const supabase = await createClient();
 
-  const { error } = await supabase.from('session_degrees').insert({
+  const { error } = await supabase.from('session_courses').insert({
     session_id: sessionId,
-    degree_id: degreeId,
+    course_id: courseId,
     base_fee: baseFee,
     single_fee_deadline: singleFeeDeadline,
     double_fee_deadline: doubleFeeDeadline,
@@ -97,20 +97,20 @@ export async function addCourseToSessionAction(state: any, formData: FormData) {
 }
 
 export async function addSubjectToSessionCourseAction(state: any, formData: FormData) {
-  const sessionDegreeId = formData.get('sessionDegreeId') as string;
+  const sessionCourseId = formData.get('sessionCourseId') as string;
   const sessionId = formData.get('sessionId') as string;
   const subjectId = parseInt(formData.get('subjectId') as string);
   const totalMarks = parseInt(formData.get('totalMarks') as string);
   const isCompulsory = formData.get('isCompulsory') === 'true';
 
-  if (!sessionDegreeId || !sessionId || isNaN(subjectId) || isNaN(totalMarks)) {
+  if (!sessionCourseId || !sessionId || isNaN(subjectId) || isNaN(totalMarks)) {
     return { error: 'All fields are required' };
   }
 
   const supabase = await createClient();
 
-  const { error } = await supabase.from('session_degree_subjects').insert({
-    session_degree_id: sessionDegreeId,
+  const { error } = await supabase.from('session_course_subjects').insert({
+    session_course_id: sessionCourseId,
     subject_id: subjectId,
     total_marks: totalMarks,
     is_compulsory: isCompulsory,
@@ -123,6 +123,6 @@ export async function addSubjectToSessionCourseAction(state: any, formData: Form
     return { error: error.message };
   }
 
-  revalidatePath(`/backstage/sessions/${sessionId}/course/${sessionDegreeId}`);
-  redirect(`/backstage/sessions/${sessionId}/course/${sessionDegreeId}`);
+  revalidatePath(`/backstage/sessions/${sessionId}/course/${sessionCourseId}`);
+  redirect(`/backstage/sessions/${sessionId}/course/${sessionCourseId}`);
 }

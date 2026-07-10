@@ -29,7 +29,7 @@ export default async function InstituteEnrollmentsPage() {
       status,
       created_at,
       sessions ( name, year ),
-      degrees ( name ),
+      courses ( name ),
       institute_students ( full_name, father_name )
     `)
     .eq('institute_id', institute.id)
@@ -63,7 +63,7 @@ export default async function InstituteEnrollmentsPage() {
                 <tr>
                   <th className="px-6 py-4">Tracking ID</th>
                   <th className="px-6 py-4">Student</th>
-                  <th className="px-6 py-4">Session & Degree</th>
+                  <th className="px-6 py-4">Session & Course</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4 text-right">Date</th>
                 </tr>
@@ -89,7 +89,7 @@ export default async function InstituteEnrollmentsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-neutral-900 dark:text-white">{app.sessions?.name} {app.sessions?.year}</div>
-                        <div className="text-xs text-neutral-500">{app.degrees?.name}</div>
+                        <div className="text-xs text-neutral-500">{app.courses?.name}</div>
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium

@@ -117,7 +117,7 @@ export default function PendingActionsTable({ pendingApps, pendingChallans }: { 
                   </th>
                   <th className="px-4 py-3">Tracking ID</th>
                   <th className="px-4 py-3">Student Name</th>
-                  <th className="px-4 py-3">Session & Degree</th>
+                  <th className="px-4 py-3">Session & Course</th>
                   <th className="px-4 py-3 text-right">Fee</th>
                 </tr>
               </thead>
@@ -148,10 +148,10 @@ export default function PendingActionsTable({ pendingApps, pendingChallans }: { 
                       </td>
                       <td className="px-4 py-3">
                         <div className="text-neutral-900 dark:text-white">{app.sessions?.name} {app.sessions?.year}</div>
-                        <div className="text-xs text-neutral-500">{app.degrees?.name}</div>
+                        <div className="text-xs text-neutral-500">{app.courses?.name}</div>
                       </td>
                       <td className="px-4 py-3 text-right font-medium">
-                        Rs. {app.degrees?.base_fee}
+                        Rs. {app.courses?.base_fee}
                       </td>
                     </tr>
                   ))

@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
-import { createDegreeAction } from '@/features/academic/actions';
+import { createCourseAction } from '@/features/academic/actions';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -15,11 +15,11 @@ const initialState: any = {
   success: false,
 };
 
-export default function NewDegreePage() {
-  const [state, formAction, isPending] = useActionState(createDegreeAction, initialState);
+export default function NewCoursePage() {
+  const [state, formAction, isPending] = useActionState(createCourseAction, initialState);
   const router = useRouter();
 
-  const { values, handleChange, clearDraft } = useFormDraft('new_degree_form', {
+  const { values, handleChange, clearDraft } = useFormDraft('new_course_form', {
     name: '',
     level: '',
     normalFee: '',
@@ -30,7 +30,7 @@ export default function NewDegreePage() {
   useEffect(() => {
     if (state.success) {
       clearDraft();
-      router.push('/backstage/degrees');
+      router.push('/backstage/courses');
     }
   }, [state.success, clearDraft, router]);
 
@@ -38,14 +38,14 @@ export default function NewDegreePage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
         <Link 
-          href="/backstage/degrees"
+          href="/backstage/courses"
           className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         >
           <ArrowLeft className="size-5" />
         </Link>
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Create Degree Program</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Define a new degree and its fee structure.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Create Course Program</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Define a new course and its fee structure.</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ export default function NewDegreePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Degree Name</Label>
+              <Label htmlFor="name">Course Name</Label>
               <Input 
                 id="name" 
                 name="name" 
@@ -141,7 +141,7 @@ export default function NewDegreePage() {
               ) : (
                 <>
                   <Save className="size-4 mr-2" />
-                  Create Degree
+                  Create Course
                 </>
               )}
             </Button>
