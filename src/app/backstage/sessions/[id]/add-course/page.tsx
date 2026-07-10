@@ -18,12 +18,6 @@ export default function AddCourseToSessionPage({ params }: { params: { id: strin
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(addCourseToSessionAction, initialState);
 
-  useEffect(() => {
-    if (state.success) {
-      router.push(`/backstage/sessions/${params.id}`);
-    }
-  }, [state.success, params.id, router]);
-
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">

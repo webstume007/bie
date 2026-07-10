@@ -19,19 +19,12 @@ export default function NewSessionPage() {
   const [state, formAction, isPending] = useActionState(createSessionAction, initialState);
   const router = useRouter();
 
-  const { values, handleChange, clearDraft } = useFormDraft('new_session_form', {
+  const { values, handleChange } = useFormDraft('new_session_form', {
     adYear: new Date().getFullYear().toString(),
     type: 'regular',
     ahYear: '',
     admissionOpenDate: '',
   });
-
-  useEffect(() => {
-    if (state.success && state.sessionId) {
-      clearDraft();
-      router.push(`/backstage/sessions/${state.sessionId}`);
-    }
-  }, [state.success, state.sessionId, clearDraft, router]);
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

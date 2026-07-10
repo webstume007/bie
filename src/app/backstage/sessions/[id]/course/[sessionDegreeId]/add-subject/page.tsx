@@ -18,13 +18,6 @@ export default function AddSubjectToCoursePage({ params }: { params: { id: strin
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(addSubjectToSessionCourseAction, initialState);
 
-  useEffect(() => {
-    if (state.success) {
-      router.push(`/backstage/sessions/${params.id}/course/${params.sessionDegreeId}`);
-      router.refresh();
-    }
-  }, [state.success, params.id, params.sessionDegreeId, router]);
-
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
@@ -43,6 +36,7 @@ export default function AddSubjectToCoursePage({ params }: { params: { id: strin
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <form action={formAction} className="p-6 space-y-6">
           <input type="hidden" name="sessionDegreeId" value={params.sessionDegreeId} />
+          <input type="hidden" name="sessionId" value={params.id} />
 
           {state?.error && (
             <div className="p-4 rounded-lg bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 text-sm font-medium">

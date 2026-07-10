@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function createSessionAction(state: any, formData: FormData) {
   const adYear = parseInt(formData.get('adYear') as string);
@@ -28,7 +29,7 @@ export async function createSessionAction(state: any, formData: FormData) {
   }
 
   revalidatePath('/backstage/sessions');
-  return { success: true, sessionId: data.id };
+  redirect(`/backstage/sessions/${data.id}`);
 }
 
 export async function createDegreeAction(state: any, formData: FormData) {
@@ -92,16 +93,17 @@ export async function addCourseToSessionAction(state: any, formData: FormData) {
   }
 
   revalidatePath(`/backstage/sessions/${sessionId}`);
-  return { success: true };
+  redirect(`/backstage/sessions/${sessionId}`);
 }
 
 export async function addSubjectToSessionCourseAction(state: any, formData: FormData) {
   const sessionDegreeId = formData.get('sessionDegreeId') as string;
+  const sessionId = formData.get('sessionId') as string;
   const subjectId = parseInt(formData.get('subjectId') as string);
   const totalMarks = parseInt(formData.get('totalMarks') as string);
   const isCompulsory = formData.get('isCompulsory') === 'true';
 
-  if (!sessionDegreeId || isNaN(subjectId) || isNaN(totalMarks)) {
+  if (!sessionDegreeId || !sessionId || isNaN(subjectId) || isNaN(totalMarks)) {
     return { error: 'All fields are required' };
   }
 
@@ -121,7 +123,6 @@ export async function addSubjectToSessionCourseAction(state: any, formData: Form
     return { error: error.message };
   }
 
-  // we don't have the sessionId readily available here for revalidation, 
-  // but we can revalidate the parent route path if needed or let the client router.refresh() handle it.
-  return { success: true };
+  revalidatePath(`/backstage/sessions/${sessionId}/course/${sessionDegreeId}`);
+  redirect(`/backstage/sessions/${sessionId}/course/${sessionDegreeId}`);
 }
