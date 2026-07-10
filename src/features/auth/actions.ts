@@ -85,11 +85,8 @@ export async function signupAction(formData: FormData) {
     return { error: error.message };
   }
 
-  // Redirect to their dashboard after successful signup
-  if (role === 'institute') return redirect('/institute');
-  if (role === 'student') return redirect('/student');
-  
-  redirect('/');
+  // Redirect to student dashboard after successful signup
+  redirect('/student');
 }
 
 export async function resetPasswordAction(formData: FormData) {
