@@ -4,25 +4,21 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function createSessionAction(state: any, formData: FormData) {
-  const name = formData.get('name') as string;
-  const year = parseInt(formData.get('year') as string);
+  const adYear = parseInt(formData.get('adYear') as string);
+  const ahYear = formData.get('ahYear') as string;
   const type = formData.get('type') as string; // 'regular' or 'supply'
-  const adDate = formData.get('adDate') as string;
-  const islamicDate = formData.get('islamicDate') as string;
   const admissionOpenDate = formData.get('admissionOpenDate') as string;
 
-  if (!name || !year || !type || !adDate || !islamicDate || !admissionOpenDate) {
+  if (isNaN(adYear) || !ahYear || !type || !admissionOpenDate) {
     return { error: 'All fields are required' };
   }
 
   const supabase = await createClient();
 
   const { data, error } = await supabase.from('sessions').insert({
-    name,
-    year,
+    ad_year: adYear,
+    ah_year: ahYear,
     type,
-    ad_date: adDate,
-    islamic_date: islamicDate,
     admission_open_date: admissionOpenDate,
     is_active: true,
   }).select('id').single();

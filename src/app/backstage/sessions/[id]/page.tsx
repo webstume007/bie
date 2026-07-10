@@ -44,7 +44,7 @@ export default async function SessionDetailsPage({ params }: { params: { id: str
         </Link>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Session Details</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage courses and subjects for {session.name}.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage courses and subjects for {session.ad_year} / {session.ah_year} AH.</p>
         </div>
       </div>
 
@@ -52,21 +52,21 @@ export default async function SessionDetailsPage({ params }: { params: { id: str
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Title</p>
-            <p className="font-bold text-slate-900 dark:text-white mt-1">{session.name} ({session.year})</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Phase</p>
+            <p className="font-bold text-slate-900 dark:text-white mt-1 capitalize">{session.type}</p>
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">AD Date</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">AD Year</p>
             <div className="flex items-center gap-2 mt-1 font-medium text-slate-900 dark:text-white">
               <Calendar className="size-4 text-slate-400" />
-              {session.ad_date ? new Date(session.ad_date).toLocaleDateString() : 'N/A'}
+              {session.ad_year}
             </div>
           </div>
           <div>
             <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Islamic Year</p>
             <div className="flex items-center gap-2 mt-1 font-medium text-slate-900 dark:text-white">
               <Hash className="size-4 text-slate-400" />
-              {session.islamic_date || 'N/A'} AH
+              {session.ah_year || 'N/A'} AH
             </div>
           </div>
           <div>

@@ -20,11 +20,9 @@ export default function NewSessionPage() {
   const router = useRouter();
 
   const { values, handleChange, clearDraft } = useFormDraft('new_session_form', {
-    name: '',
-    year: new Date().getFullYear().toString(),
+    adYear: new Date().getFullYear().toString(),
     type: 'regular',
-    adDate: '',
-    islamicDate: '',
+    ahYear: '',
     admissionOpenDate: '',
   });
 
@@ -59,32 +57,9 @@ export default function NewSessionPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Session Title</Label>
-              <Input 
-                id="name" 
-                name="name" 
-                placeholder="e.g. Annual 2026" 
-                value={values.name}
-                onChange={handleChange}
-                required 
-              />
-            </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="year">Year</Label>
-              <Input 
-                id="year" 
-                name="year" 
-                type="number"
-                value={values.year}
-                onChange={handleChange}
-                required 
-              />
-            </div>
-
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="type">Session Type</Label>
+              <Label htmlFor="type">Session Phase</Label>
               <select
                 id="type"
                 name="type"
@@ -98,34 +73,33 @@ export default function NewSessionPage() {
               </select>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="adYear">Year in AD (e.g. 2026)</Label>
+              <Input 
+                id="adYear" 
+                name="adYear" 
+                type="number"
+                value={values.adYear}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="ahYear">Year in AH (e.g. 1448)</Label>
+              <Input 
+                id="ahYear" 
+                name="ahYear" 
+                type="number" 
+                placeholder="1448"
+                value={values.ahYear}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+
             <div className="space-y-2 md:col-span-2 pt-4 border-t border-slate-100 dark:border-slate-800">
               <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Important Dates</h3>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="adDate">AD Date (Gregorian)</Label>
-              <Input 
-                id="adDate" 
-                name="adDate" 
-                type="date" 
-                value={values.adDate}
-                onChange={handleChange}
-                required 
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="islamicDate">Islamic Year (e.g. 1448)</Label>
-              <Input 
-                id="islamicDate" 
-                name="islamicDate" 
-                type="text" 
-                placeholder="1448"
-                maxLength={4}
-                value={values.islamicDate}
-                onChange={handleChange}
-                required 
-              />
             </div>
 
             <div className="space-y-2 md:col-span-2">

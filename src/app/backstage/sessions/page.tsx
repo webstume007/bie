@@ -33,18 +33,17 @@ export default async function SessionsPage() {
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium">
               <tr>
-                <th className="px-6 py-4">Session Title</th>
+                <th className="px-6 py-4">Session Year</th>
                 <th className="px-6 py-4">Phase</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Admission Open</th>
-                <th className="px-6 py-4">Islamic Year</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {error && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-red-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-red-500">
                     Failed to load sessions.
                   </td>
                 </tr>
@@ -52,7 +51,7 @@ export default async function SessionsPage() {
               
               {!error && sessions?.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={5} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
                       <CalendarClock className="size-12 mb-3 opacity-20" />
                       <p className="text-base font-medium text-slate-900 dark:text-white">No sessions configured</p>
@@ -65,7 +64,7 @@ export default async function SessionsPage() {
               {!error && sessions?.map((session) => (
                 <tr key={session.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
-                    {session.name} ({session.year})
+                    {session.ad_year} / {session.ah_year} AH
                   </td>
                   <td className="px-6 py-4 text-slate-600 dark:text-slate-300 capitalize">
                     {session.type}
@@ -81,9 +80,6 @@ export default async function SessionsPage() {
                   </td>
                   <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                     {session.admission_open_date ? new Date(session.admission_open_date).toLocaleDateString() : 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
-                    {session.islamic_date} AH
                   </td>
                   <td className="px-6 py-4 text-right">
                     <Link href={`/backstage/sessions/${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">
