@@ -11,7 +11,7 @@ export function LanguageSwitcher() {
       variant="outline"
       size="sm"
       onClick={() => setLanguage(language === 'en' ? 'ur' : 'en')}
-      className="fixed top-4 right-4 z-50 font-medium"
+      className="fixed bottom-6 right-6 z-50 font-medium shadow-lg rounded-full px-4"
       title={language === 'en' ? 'Switch to Urdu' : 'Switch to English'}
     >
       {language === 'en' ? 'اردو' : 'English'}
