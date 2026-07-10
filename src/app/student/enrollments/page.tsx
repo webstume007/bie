@@ -12,18 +12,18 @@ export default async function StudentEnrollmentsPage() {
 
   // Fetch enrollments for this student
   const { data: enrollments, error } = await supabase
-    .from('enrollments')
+    .from('exam_applications')
     .select(`
       id,
-      enrollment_type,
+      is_private,
       status,
-      assigned_roll_no,
-      sessions ( title ),
+      tracking_id,
+      sessions ( name ),
       degrees ( name ),
       institutes ( name )
     `)
     .eq('student_id', user.id)
-    .order('id', { ascending: false });
+    .order('created_at', { ascending: false });
 
   return (
     <div className="space-y-6">
@@ -32,9 +32,11 @@ export default async function StudentEnrollmentsPage() {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">My Enrollments</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">View the status of your applications and active enrollments.</p>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-          Apply for Exam
-        </Button>
+        <Link href="/student/enrollments/new">
+          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            Apply for Exam
+          </Button>
+        </Link>
       </div>
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
@@ -67,18 +69,20 @@ export default async function StudentEnrollmentsPage() {
                       <FileX2 className="size-12 mb-3 opacity-20" />
                       <p className="text-base font-medium text-slate-900 dark:text-white">No enrollments found</p>
                       <p className="mt-1">You haven't applied for any exams yet.</p>
-                      <Button variant="outline" className="mt-6 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">
-                        Start New Application
-                      </Button>
+                      <Link href="/student/enrollments/new">
+                        <Button variant="outline" className="mt-6 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+                          Start New Application
+                        </Button>
+                      </Link>
                     </div>
                   </td>
                 </tr>
               )}
 
               {!error && enrollments?.map((enrollment: any) => {
-                const sessionName = enrollment.sessions?.title || 'Unknown Session';
+                const sessionName = enrollment.sessions?.name || 'Unknown Session';
                 const degreeName = enrollment.degrees?.name || 'Unknown Degree';
-                const isRegular = enrollment.enrollment_type === 'REGULAR';
+                const isRegular = !enrollment.is_private;
 
                 return (
                   <tr key={enrollment.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -90,7 +94,7 @@ export default async function StudentEnrollmentsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="text-slate-900 dark:text-white font-medium">{enrollment.enrollment_type}</span>
+                        <span className="text-slate-900 dark:text-white font-medium">{isRegular ? 'REGULAR' : 'PRIVATE'}</span>
                         {isRegular && enrollment.institutes?.name && (
                           <span className="text-xs text-slate-500 truncate max-w-[200px]" title={enrollment.institutes.name}>
                             {enrollment.institutes.name}
@@ -99,7 +103,7 @@ export default async function StudentEnrollmentsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">
-                      {enrollment.assigned_roll_no || 'Pending'}
+                      {enrollment.tracking_id || 'Pending'}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${enrollment.status === 'APPROVED' ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' :
