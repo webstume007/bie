@@ -130,7 +130,7 @@ export function ChallanSection({ application, challan }: { application: any, cha
 }
 
 function UploadReceiptForm({ challan, applicationId }: { challan: any, applicationId: string }) {
-  const [state, formAction, isPending] = useActionState(uploadReceiptAction, { error: '', success: false });
+  const [state, formAction, isPending] = useActionState(uploadReceiptAction, { error: '', success: false } as any);
 
   if (challan.status === 'PAID') {
     return (

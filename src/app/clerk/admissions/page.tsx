@@ -18,7 +18,8 @@ export default async function ClerkAdmissionsPage() {
     .eq('id', user.id)
     .single();
 
-  if (profile?.roles?.name !== 'clerk' && profile?.roles?.name !== 'super_admin') {
+  const roleName = (profile?.roles as any)?.name;
+  if (roleName !== 'clerk' && roleName !== 'super_admin') {
     redirect('/dashboard');
   }
 

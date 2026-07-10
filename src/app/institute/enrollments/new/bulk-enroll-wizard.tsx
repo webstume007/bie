@@ -89,7 +89,7 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <Label className="text-base">1. Select Session</Label>
-            <Select value={sessionId} onValueChange={setSessionId}>
+            <Select value={sessionId} onValueChange={(val) => setSessionId(val || '')}>
               <SelectTrigger className="bg-neutral-50 dark:bg-neutral-950">
                 <SelectValue placeholder="Choose an active session" />
               </SelectTrigger>
@@ -103,7 +103,7 @@ export default function BulkEnrollWizard({ sessions, degrees, students }: Wizard
 
           <div className="space-y-3">
             <Label className="text-base">2. Select Degree</Label>
-            <Select value={degreeId} onValueChange={setDegreeId}>
+            <Select value={degreeId} onValueChange={(val) => setDegreeId(val || '')}>
               <SelectTrigger className="bg-neutral-50 dark:bg-neutral-950">
                 <SelectValue placeholder="Choose a degree program" />
               </SelectTrigger>

@@ -123,10 +123,13 @@ export async function generateBulkChallanAction(applicationIds: string[]) {
   let totalAmount = 0;
 
   for (const app of apps) {
+    const session = app.sessions as any;
+    const degree = app.degrees as any;
+
     const deadlines = {
-      normalFeeDeadline: app.sessions.normal_fee_date,
-      lateFeeDeadline: app.sessions.late_fee_date,
-      doubleFeeDeadline: app.sessions.double_fee_date,
+      normalFeeDeadline: session.normal_fee_date,
+      lateFeeDeadline: session.late_fee_date,
+      doubleFeeDeadline: session.double_fee_date,
     };
 
     const tier = determineFeeTier(deadlines);
@@ -134,7 +137,7 @@ export async function generateBulkChallanAction(applicationIds: string[]) {
       return { error: 'One or more applications have passed the final deadline.' };
     }
 
-    const amount = calculateFeeAmount(tier, app.degrees.base_fee, app.degrees.late_fee, app.degrees.double_fee);
+    const amount = calculateFeeAmount(tier, degree.base_fee, degree.late_fee, degree.double_fee);
     totalAmount += amount;
   }
 
