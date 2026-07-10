@@ -5,7 +5,7 @@ import { createSessionAction } from '@/features/academic/actions';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, Loader2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useRouter } from 'next/navigation';
@@ -23,18 +23,17 @@ export default function NewSessionPage() {
     name: '',
     year: new Date().getFullYear().toString(),
     type: 'regular',
-    enrollmentStartDate: '',
-    normalFeeDeadline: '',
-    lateFeeDeadline: '',
-    doubleFeeDeadline: '',
+    adDate: '',
+    islamicDate: '',
+    admissionOpenDate: '',
   });
 
   useEffect(() => {
-    if (state.success) {
+    if (state.success && state.sessionId) {
       clearDraft();
-      router.push('/backstage/sessions');
+      router.push(`/backstage/sessions/${state.sessionId}`);
     }
-  }, [state.success, clearDraft, router]);
+  }, [state.success, state.sessionId, clearDraft, router]);
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -47,7 +46,7 @@ export default function NewSessionPage() {
         </Link>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Create Academic Session</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Define deadlines for a new enrollment session.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Step 1: Define basic session parameters.</p>
         </div>
       </div>
 
@@ -61,7 +60,7 @@ export default function NewSessionPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Session Name</Label>
+              <Label htmlFor="name">Session Title</Label>
               <Input 
                 id="name" 
                 name="name" 
@@ -94,84 +93,69 @@ export default function NewSessionPage() {
                 className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 required
               >
-                <option value="regular">Regular (Annual)</option>
+                <option value="regular">Regular</option>
                 <option value="supply">Supplementary</option>
               </select>
             </div>
-          </div>
 
-          <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
-            <h3 className="text-base font-medium text-slate-900 dark:text-white mb-4">Timeline & Deadlines</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="enrollmentStartDate">Enrollment Opens</Label>
-                <Input 
-                  id="enrollmentStartDate" 
-                  name="enrollmentStartDate" 
-                  type="date"
-                  value={values.enrollmentStartDate}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="normalFeeDeadline">Normal Fee Deadline</Label>
-                <Input 
-                  id="normalFeeDeadline" 
-                  name="normalFeeDeadline" 
-                  type="date"
-                  value={values.normalFeeDeadline}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="lateFeeDeadline">Late Fee Deadline</Label>
-                <Input 
-                  id="lateFeeDeadline" 
-                  name="lateFeeDeadline" 
-                  type="date"
-                  value={values.lateFeeDeadline}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="doubleFeeDeadline">Double Fee Deadline</Label>
-                <Input 
-                  id="doubleFeeDeadline" 
-                  name="doubleFeeDeadline" 
-                  type="date"
-                  value={values.doubleFeeDeadline}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
+            <div className="space-y-2 md:col-span-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Important Dates</h3>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="adDate">AD Date (Gregorian)</Label>
+              <Input 
+                id="adDate" 
+                name="adDate" 
+                type="date" 
+                value={values.adDate}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="islamicDate">Islamic Year (e.g. 1448)</Label>
+              <Input 
+                id="islamicDate" 
+                name="islamicDate" 
+                type="text" 
+                placeholder="1448"
+                maxLength={4}
+                value={values.islamicDate}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="admissionOpenDate">Admission Open Date</Label>
+              <Input 
+                id="admissionOpenDate" 
+                name="admissionOpenDate" 
+                type="date" 
+                value={values.admissionOpenDate}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+
           </div>
 
-          <div className="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex justify-end">
             <Button 
               type="submit" 
-              className="bg-indigo-600 hover:bg-indigo-700 text-neutral-950 min-w-[140px]"
               disabled={isPending}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[160px]"
             >
               {isPending ? (
-                <>
-                  <Loader2 className="size-4 mr-2 animate-spin" />
-                  Creating...
-                </>
+                <Loader2 className="size-4 animate-spin" />
               ) : (
-                <>
-                  <Save className="size-4 mr-2" />
-                  Create Session
-                </>
+                <span className="flex items-center gap-2">
+                  Continue to Courses <ArrowRight className="size-4" />
+                </span>
               )}
             </Button>
-            <span className="text-xs text-slate-500">Draft saved automatically</span>
           </div>
         </form>
       </div>

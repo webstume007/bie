@@ -7,34 +7,32 @@ export async function createSessionAction(state: any, formData: FormData) {
   const name = formData.get('name') as string;
   const year = parseInt(formData.get('year') as string);
   const type = formData.get('type') as string; // 'regular' or 'supply'
-  const enrollmentStartDate = formData.get('enrollmentStartDate') as string;
-  const normalFeeDeadline = formData.get('normalFeeDeadline') as string;
-  const lateFeeDeadline = formData.get('lateFeeDeadline') as string;
-  const doubleFeeDeadline = formData.get('doubleFeeDeadline') as string;
+  const adDate = formData.get('adDate') as string;
+  const islamicDate = formData.get('islamicDate') as string;
+  const admissionOpenDate = formData.get('admissionOpenDate') as string;
 
-  if (!name || !year || !type || !enrollmentStartDate || !normalFeeDeadline || !lateFeeDeadline || !doubleFeeDeadline) {
+  if (!name || !year || !type || !adDate || !islamicDate || !admissionOpenDate) {
     return { error: 'All fields are required' };
   }
 
   const supabase = await createClient();
 
-  const { error } = await supabase.from('sessions').insert({
+  const { data, error } = await supabase.from('sessions').insert({
     name,
     year,
     type,
-    enrollment_start_date: enrollmentStartDate,
-    normal_fee_deadline: normalFeeDeadline,
-    late_fee_deadline: lateFeeDeadline,
-    double_fee_deadline: doubleFeeDeadline,
+    ad_date: adDate,
+    islamic_date: islamicDate,
+    admission_open_date: admissionOpenDate,
     is_active: true,
-  });
+  }).select('id').single();
 
   if (error) {
     return { error: error.message };
   }
 
   revalidatePath('/backstage/sessions');
-  return { success: true };
+  return { success: true, sessionId: data.id };
 }
 
 export async function createDegreeAction(state: any, formData: FormData) {
@@ -63,5 +61,71 @@ export async function createDegreeAction(state: any, formData: FormData) {
   }
 
   revalidatePath('/backstage/degrees');
+  return { success: true };
+}
+
+export async function addCourseToSessionAction(state: any, formData: FormData) {
+  const sessionId = formData.get('sessionId') as string;
+  const degreeId = parseInt(formData.get('degreeId') as string);
+  const baseFee = parseFloat(formData.get('baseFee') as string);
+  const singleFeeDeadline = formData.get('singleFeeDeadline') as string;
+  const doubleFeeDeadline = formData.get('doubleFeeDeadline') as string;
+  const tripleFeeDeadline = formData.get('tripleFeeDeadline') as string;
+
+  if (!sessionId || isNaN(degreeId) || isNaN(baseFee) || !singleFeeDeadline || !doubleFeeDeadline || !tripleFeeDeadline) {
+    return { error: 'All fields are required' };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('session_degrees').insert({
+    session_id: sessionId,
+    degree_id: degreeId,
+    base_fee: baseFee,
+    single_fee_deadline: singleFeeDeadline,
+    double_fee_deadline: doubleFeeDeadline,
+    triple_fee_deadline: tripleFeeDeadline,
+  });
+
+  if (error) {
+    // Check for unique constraint violation
+    if (error.code === '23505') {
+      return { error: 'This course is already added to this session.' };
+    }
+    return { error: error.message };
+  }
+
+  revalidatePath(`/backstage/sessions/${sessionId}`);
+  return { success: true };
+}
+
+export async function addSubjectToSessionCourseAction(state: any, formData: FormData) {
+  const sessionDegreeId = formData.get('sessionDegreeId') as string;
+  const subjectId = parseInt(formData.get('subjectId') as string);
+  const totalMarks = parseInt(formData.get('totalMarks') as string);
+  const isCompulsory = formData.get('isCompulsory') === 'true';
+
+  if (!sessionDegreeId || isNaN(subjectId) || isNaN(totalMarks)) {
+    return { error: 'All fields are required' };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('session_degree_subjects').insert({
+    session_degree_id: sessionDegreeId,
+    subject_id: subjectId,
+    total_marks: totalMarks,
+    is_compulsory: isCompulsory,
+  });
+
+  if (error) {
+    if (error.code === '23505') {
+      return { error: 'This subject is already added to this course.' };
+    }
+    return { error: error.message };
+  }
+
+  // we don't have the sessionId readily available here for revalidation, 
+  // but we can revalidate the parent route path if needed or let the client router.refresh() handle it.
   return { success: true };
 }

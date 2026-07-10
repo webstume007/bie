@@ -33,11 +33,11 @@ export default async function SessionsPage() {
           <table className="w-full text-sm text-left">
             <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-medium">
               <tr>
-                <th className="px-6 py-4">Session Name</th>
-                <th className="px-6 py-4">Type</th>
+                <th className="px-6 py-4">Session Title</th>
+                <th className="px-6 py-4">Phase</th>
                 <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Normal Fee Date</th>
-                <th className="px-6 py-4">Double Fee Date</th>
+                <th className="px-6 py-4">Admission Open</th>
+                <th className="px-6 py-4">Islamic Year</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -80,15 +80,15 @@ export default async function SessionsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
-                    {new Date(session.normal_fee_deadline).toLocaleDateString()}
+                    {session.admission_open_date ? new Date(session.admission_open_date).toLocaleDateString() : 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
-                    {new Date(session.double_fee_deadline).toLocaleDateString()}
+                    {session.islamic_date} AH
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">
-                      Edit
-                    </button>
+                    <Link href={`/backstage/sessions/${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">
+                      Manage Configuration
+                    </Link>
                   </td>
                 </tr>
               ))}
