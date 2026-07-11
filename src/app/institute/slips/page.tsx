@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { RollNoSlip } from '@/components/RollNoSlip';
+import BulkSlipActions from './bulk-actions';
 
 export const revalidate = 0;
 
@@ -45,13 +46,8 @@ export default async function InstituteBulkSlipsPage() {
 
   return (
     <div className="min-h-screen bg-neutral-100 py-12 px-4 print:p-0 print:bg-white space-y-12 print:space-y-0">
-      <div className="max-w-3xl mx-auto text-right print:hidden">
-        <button 
-          onClick={() => window.print()}
-          className="px-6 py-2 bg-indigo-600 text-neutral-950 rounded-lg hover:bg-indigo-700 font-medium shadow-sm"
-        >
-          Print All Slips ({applications.length})
-        </button>
+      <div className="max-w-3xl mx-auto print:hidden">
+        <BulkSlipActions count={applications.length} />
       </div>
 
       {applications.map((app, i) => (

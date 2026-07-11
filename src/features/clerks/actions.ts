@@ -73,3 +73,41 @@ export async function approveAdmissionAction(applicationId: string, examCenterId
   revalidatePath('/clerk/admissions');
   return { success: true };
 }
+
+export async function updateEnrollmentDataAction(applicationId: string, data: { full_name: string; father_name: string }) {
+  const { createClient: createServerClient } = await import('@/lib/supabase/server');
+  const supabase = await createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Not authenticated' };
+
+  // Fetch application to know if it's private or institute
+  const { data: app, error: fetchErr } = await supabase
+    .from('exam_applications')
+    .select('is_private, student_id, institute_student_id')
+    .eq('id', applicationId)
+    .single();
+
+  if (fetchErr || !app) return { error: 'Application not found' };
+
+  let updateErr;
+  
+  if (app.is_private && app.student_id) {
+    const { error } = await supabase
+      .from('students')
+      .update({ full_name: data.full_name, father_name: data.father_name })
+      .eq('id', app.student_id);
+    updateErr = error;
+  } else if (!app.is_private && app.institute_student_id) {
+    const { error } = await supabase
+      .from('institute_students')
+      .update({ full_name: data.full_name, father_name: data.father_name })
+      .eq('id', app.institute_student_id);
+    updateErr = error;
+  }
+
+  if (updateErr) return { error: updateErr.message };
+
+  revalidatePath('/clerk/data-entry');
+  return { success: true };
+}

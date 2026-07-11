@@ -248,3 +248,179 @@ export async function addSubjectToSessionCourseAction(state: any, formData: Form
   revalidatePath(`/backstage/sessions/${sessionId}/course/${sessionCourseId}`);
   redirect(`/backstage/sessions/${sessionId}/course/${sessionCourseId}`);
 }
+
+export async function fetchFullSessionAction(sessionId: string) {
+  const supabase = await createClient();
+  
+  const { data: session, error: sessionErr } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('id', sessionId)
+    .single();
+    
+  if (sessionErr || !session) return { error: 'Session not found' };
+
+  const { data: sessionCourses, error: coursesErr } = await supabase
+    .from('session_courses')
+    .select(`
+      id,
+      base_fee,
+      single_fee,
+      double_fee,
+      triple_fee,
+      mandatory_electives_count,
+      courses ( id, name )
+    `)
+    .eq('session_id', sessionId);
+
+  const formattedCourses = [];
+  if (sessionCourses) {
+    for (const sc of sessionCourses) {
+      const { data: subjects } = await supabase
+        .from('session_course_subjects')
+        .select(`
+          id,
+          total_marks,
+          is_compulsory,
+          subjects ( id, name )
+        `)
+        .eq('session_course_id', sc.id);
+
+      formattedCourses.push({
+        id: sc.id,
+        courseId: (sc.courses as any)?.id,
+        courseName: (sc.courses as any)?.name,
+        singleFee: sc.single_fee,
+        doubleFee: sc.double_fee,
+        tripleFee: sc.triple_fee,
+        mandatoryCount: sc.mandatory_electives_count,
+        subjects: subjects?.map(sub => ({
+          id: sub.id,
+          subjectId: (sub.subjects as any)?.id,
+          subjectName: (sub.subjects as any)?.name,
+          totalMarks: sub.total_marks,
+          isCompulsory: sub.is_compulsory
+        })) || []
+      });
+    }
+  }
+
+  return { 
+    success: true, 
+    data: {
+      ...session,
+      courses: formattedCourses
+    }
+  };
+}
+
+export async function updateFullSessionAction(payload: {
+  id: string;
+  adYear: number;
+  ahYear: string;
+  type: string;
+  admissionOpenDate: string;
+  singleFeeDate: string;
+  doubleFeeDate: string;
+  tripleFeeDate: string;
+  courses: {
+    id?: number;
+    courseName: string;
+    singleFee: number;
+    doubleFee: number;
+    tripleFee: number;
+    mandatoryCount: number;
+    subjects: {
+      id?: number;
+      subjectName: string;
+      totalMarks: number;
+      isCompulsory: boolean;
+    }[];
+  }[];
+}) {
+  const supabase = await createClient();
+
+  // 1. Update Session
+  const { error: sessionError } = await supabase.from('sessions').update({
+    ad_year: payload.adYear,
+    ah_year: payload.ahYear,
+    type: payload.type,
+    admission_open_date: payload.admissionOpenDate,
+    single_fee_date: payload.singleFeeDate,
+    double_fee_date: payload.doubleFeeDate,
+    triple_fee_date: payload.tripleFeeDate,
+  }).eq('id', payload.id);
+
+  if (sessionError) return { error: 'Failed to update session: ' + sessionError.message };
+
+  // For a robust implementation without breaking foreign keys, we'll try to update existing session_courses,
+  // or insert new ones. Removing existing ones is risky if they have applications linked.
+  
+  for (const course of payload.courses) {
+    let courseId: number;
+    const { data: existingCourse } = await supabase.from('courses').select('id').ilike('name', course.courseName).maybeSingle();
+    
+    if (existingCourse) {
+      courseId = existingCourse.id;
+    } else {
+      const { data: newCourse, error: createCourseErr } = await supabase.from('courses').insert({ name: course.courseName, base_fee: 0 }).select('id').single();
+      if (createCourseErr) continue;
+      courseId = newCourse.id;
+    }
+
+    let sessionCourseId: number;
+    if (course.id) {
+      // Update existing
+      await supabase.from('session_courses').update({
+        single_fee: course.singleFee,
+        double_fee: course.doubleFee,
+        triple_fee: course.tripleFee,
+        mandatory_electives_count: course.mandatoryCount,
+      }).eq('id', course.id);
+      sessionCourseId = course.id;
+    } else {
+      // Insert new
+      const { data: newSc } = await supabase.from('session_courses').insert({
+        session_id: payload.id,
+        course_id: courseId,
+        single_fee: course.singleFee,
+        double_fee: course.doubleFee,
+        triple_fee: course.tripleFee,
+        mandatory_electives_count: course.mandatoryCount,
+      }).select('id').single();
+      if (!newSc) continue;
+      sessionCourseId = newSc.id;
+    }
+
+    if (course.subjects && course.subjects.length > 0) {
+      for (const sub of course.subjects) {
+        let subjectId: number;
+        const { data: existingSub } = await supabase.from('subjects').select('id').ilike('name', sub.subjectName).maybeSingle();
+        if (existingSub) {
+          subjectId = existingSub.id;
+        } else {
+          const { data: newSub } = await supabase.from('subjects').insert({ name: sub.subjectName }).select('id').single();
+          if (!newSub) continue;
+          subjectId = newSub.id;
+        }
+
+        if (sub.id) {
+          await supabase.from('session_course_subjects').update({
+            total_marks: sub.totalMarks,
+            is_compulsory: sub.isCompulsory,
+          }).eq('id', sub.id);
+        } else {
+          await supabase.from('session_course_subjects').insert({
+            session_course_id: sessionCourseId,
+            subject_id: subjectId,
+            total_marks: sub.totalMarks,
+            is_compulsory: sub.isCompulsory,
+          });
+        }
+      }
+    }
+  }
+
+  revalidatePath('/backstage/sessions');
+  return { success: true };
+}

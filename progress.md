@@ -10,7 +10,7 @@
         *   Role-Based Access Control (RBAC) routing (redirecting unauthorized roles).
 *   **Modular Architecture (Independent Components)**
     *   **Features/Modules (`src/features/`):** Encapsulating logic by domain to prevent bloated files.
-        *   `auth`: Login, signup, 3D Canvas integration, recovery.
+        *   `auth`: Login, signup, recovery.
         *   `admissions`: State-machine logic, drafts, document verification.
         *   `finance`: Fee calculations, challan generation, 1LINK webhooks.
         *   `academic`: Sessions, subjects, marks entry.
@@ -37,8 +37,8 @@ bie/
 │   │   ├── globals.css         
 │   │   └── layout.tsx          
 │   ├── features/               # Domain-driven Modules (Keeps code modular & clean)
-│   │   ├── auth/               # Auth logic, 3D Login Scene
-│   │   │   ├── components/     # e.g., ThreeJsScene.tsx, LoginForm.tsx
+│   │   ├── auth/               # Auth logic
+│   │   │   ├── components/     # e.g., LoginForm.tsx
 │   │   │   ├── actions.ts      # Server actions
 │   │   │   └── schemas.ts      # Zod validation
 │   │   ├── admissions/         # Admission state machine
@@ -59,7 +59,7 @@ bie/
 ├── supabase/                   # Supabase local environment
 │   ├── migrations/             # SQL Migrations (Schema & RLS Policies)
 │   └── seed.sql                # Seed data for roles & degrees
-├── public/                     # Static Assets (3D models, logos)
+├── public/                     # Static Assets (logos)
 ├── .env.local                  
 └── package.json                
 ```
@@ -82,7 +82,7 @@ To ensure a structured and manageable development process, the project will be e
 *   Implement strict Row Level Security (RLS) policies and Database Triggers for Audit Logging.
 
 ### Phase 2: Authentication & Middleware Setup
-*   Develop the interactive 3D Islamic-themed login and signup pages using Three.js.
+*   Develop the clean, modern login and signup pages.
 *   Integrate Supabase Auth (CNIC-based login).
 *   Implement `middleware.ts` to enforce RBAC and route protection (e.g., blocking unauthorized access to `/backstage` or `/clerk`).
 *   Set up account recovery via Resend email API (with email masking).

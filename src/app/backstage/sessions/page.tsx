@@ -83,7 +83,12 @@ export default async function SessionsPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <Link href={`/backstage/sessions/${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm flex items-center gap-1">
+                      <Link href={`/backstage/sessions/editor?clone=${session.id}`} className="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400 dark:hover:text-emerald-300 font-medium text-sm flex items-center gap-1">
+                        <Plus className="size-4" />
+                        Clone
+                      </Link>
+                      
+                      <Link href={`/backstage/sessions/editor?edit=${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm flex items-center gap-1">
                         <Settings className="size-4" />
                         Manage
                       </Link>

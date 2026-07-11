@@ -26,7 +26,7 @@ A modern, secure, and real-time educational management portal designed for an Is
   - **Primary (English):** `Inter` for clean, modern English typography.
   - **Urdu (Specialized):** `IBM Plex Sans Arabic` loaded natively via `next/font/google` and applied via a custom `font-urdu` Tailwind class to ensure all Urdu text renders beautifully without breaking layouts.
 * **Brand Logo Header:** The main header of all dashboard views displays the official `logo.webp` alongside `bie-logo.svg` (for the title), including a CSS fallback element if `logo.webp` is missing.
-* **Auth Page Experience:** Integrate `Three.js` on the login/signup pages to render a 3D, interactive Islamic-themed environment (e.g., desert landscape, date palm trees, greenery).
+* **Auth Page Experience:** Standard clean and modern authentication UI.
 * **Form Draft Persistence (useFormDraft):** Forms use the custom `useFormDraft` hook which automatically:
   - Backs up input states to `localStorage` under dynamic keys on keystroke.
   - Intercepts page refresh/close events (`beforeunload`) to alert the user if they have unsaved changes.
