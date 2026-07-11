@@ -29,7 +29,7 @@ export default async function TeacherMarksPage() {
     .eq('user_id', user.id)
     .single();
 
-  let enrollments = [];
+  let enrollments: any[] = [];
   if (staffData?.institute_id) {
     const { data } = await supabase
       .from('exam_applications')
