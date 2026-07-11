@@ -166,6 +166,8 @@ export async function createCourseAction(state: any, formData: FormData) {
   const normalFee = parseInt(formData.get('normalFee') as string);
   const lateFee = parseInt(formData.get('lateFee') as string);
   const doubleFee = parseInt(formData.get('doubleFee') as string);
+  const prerequisiteCourseIdStr = formData.get('prerequisiteCourseId') as string;
+  const prerequisiteCourseId = prerequisiteCourseIdStr ? parseInt(prerequisiteCourseIdStr) : null;
 
   if (!name || !level || isNaN(normalFee) || isNaN(lateFee) || isNaN(doubleFee)) {
     return { error: 'All fields are required and fees must be valid numbers' };
@@ -179,6 +181,7 @@ export async function createCourseAction(state: any, formData: FormData) {
     normal_fee: normalFee,
     late_fee: lateFee,
     double_fee: doubleFee,
+    prerequisite_course_id: prerequisiteCourseId,
   });
 
   if (error) {

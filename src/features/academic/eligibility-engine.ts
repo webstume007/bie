@@ -58,7 +58,8 @@ export async function calculateStudentEligibility(studentId: string): Promise<El
         courses (
           id,
           name,
-          min_age
+          min_age,
+          prerequisite_course_id
         )
       )
     `)
@@ -73,11 +74,14 @@ export async function calculateStudentEligibility(studentId: string): Promise<El
 
   // If no past applications, they are a fresh student.
   if (pastApplications.length === 0) {
+    // Fresh students can only apply to courses that don't have a prerequisite
+    const validCourses = ageEligibleCourses.filter(c => !c.prerequisite_course_id);
+    
     return {
       canApply: true,
-      eligibleCourses: ageEligibleCourses.map(c => ({ id: c.id.toString(), name: c.name })),
+      eligibleCourses: validCourses.map(c => ({ id: c.id.toString(), name: c.name })),
       isSupply: false,
-      message: 'New student. Eligible for fresh admission based on your age.'
+      message: 'New student. Eligible for fresh admission in root courses based on your age.'
     };
   }
 
@@ -96,11 +100,17 @@ export async function calculateStudentEligibility(studentId: string): Promise<El
   }
 
   // If they passed, they can apply for the next level. 
-  // We include all age-eligible courses for now (since we don't have strict prerequisite mappings yet)
+  // We check which courses have the latest passed course as a prerequisite.
+  // We ALSO allow them to apply for any root courses just in case they want to start a different chain.
   if (latestResult.status === 'PASS') {
+    const passedCourseId = latestApp.course_id;
+    const validCourses = ageEligibleCourses.filter(c => 
+      c.prerequisite_course_id === passedCourseId || !c.prerequisite_course_id
+    );
+
     return {
       canApply: true,
-      eligibleCourses: ageEligibleCourses.map(c => ({ id: c.id.toString(), name: c.name })),
+      eligibleCourses: validCourses.map(c => ({ id: c.id.toString(), name: c.name })),
       isSupply: false,
       message: 'Congratulations on passing your previous exam! Select your next course.'
     };
