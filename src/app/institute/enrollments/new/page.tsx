@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { InstituteShell } from '@/components/institute/institute-shell';
 import { redirect } from 'next/navigation';
-import BulkEnrollWizard from './bulk-enroll-wizard';
+import InstituteAdmissionClient from './institute-admission-client';
 
 export const revalidate = 0;
 
@@ -41,11 +41,7 @@ export default async function InstituteBulkEnrollPage() {
 
   return (
     <InstituteShell>
-      <BulkEnrollWizard 
-        sessions={sessions || []} 
-        courses={courses || []} 
-        students={students || []} 
-      />
+      <InstituteAdmissionClient instituteId={institute.id.toString()} />
     </InstituteShell>
   );
 }

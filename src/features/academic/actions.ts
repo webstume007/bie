@@ -509,3 +509,35 @@ export async function lockSessionAction(sessionId: string, email: string, passwo
   revalidatePath('/backstage/sessions');
   return { success: true };
 }
+
+export async function fetchStudentByCnicAction(cnic: string) {
+  const supabase = await createClient();
+  const { data: userProfile, error: profileError } = await supabase.from('user_profiles').select('*').eq('cnic', cnic).single();
+  if (profileError || !userProfile) return { found: false };
+  const { data: studentRecord } = await supabase.from('students').select('*').eq('id', userProfile.id).single();
+  const { calculateStudentEligibility } = await import('./eligibility-engine');
+  const eligibility = await calculateStudentEligibility(userProfile.id);
+  return { found: true, userProfile, studentRecord, eligibility };
+}
+
+
+export async function processAdmissionAction(payload: any) {
+  const supabase = await createClient();
+  try {
+    let studentId = payload.studentId;
+    if (!studentId) return { error: 'Creating new students without an auth account is not fully implemented yet.' };
+    const { error: studentError } = await supabase.from('students').upsert({ id: studentId, father_name: payload.fatherName, name_urdu: payload.nameUrdu, father_name_urdu: payload.fatherNameUrdu, dob: payload.dob, gender: payload.gender, b_form_cnic: payload.cnic, email: payload.email, mobile_number: payload.mobile, whatsapp_number: payload.whatsapp, permanent_address: payload.permanentAddress, current_institute_name: payload.currentInstituteName, institute_address: payload.instituteAddress, near_examination_center: payload.nearExamCenter });
+    if (studentError) throw new Error('Failed to update student profile: ' + studentError.message);
+    const { data: appData, error: appError } = await supabase.from('exam_applications').insert({ student_id: studentId, session_id: payload.sessionId, course_id: payload.courseId, institute_id: payload.instituteId || null, enrollment_type: payload.isPrivate ? 'PRIVATE' : 'REGULAR', status: 'SUBMITTED', attestation_status: payload.isPrivate ? 'pending' : 'not_required' }).select('id').single();
+    if (appError) throw new Error('Failed to create application: ' + appError.message);
+    if (payload.subjectIds && payload.subjectIds.length > 0) {
+      const subjectInserts = payload.subjectIds.map((subId: string) => ({ enrollment_id: appData.id, subject_id: parseInt(subId) }));
+      const { error: subError } = await supabase.from('exam_application_subjects').insert(subjectInserts);
+      if (subError) throw new Error('Failed to add subjects: ' + subError.message);
+    }
+    return { success: true, applicationId: appData.id };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+}
+

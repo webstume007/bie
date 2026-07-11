@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
-import { EnrollmentForm } from '@/components/student/enrollment-form';
+import { AdmissionWizard } from '@/components/admission-wizard';
+import { fetchStudentByCnicAction } from '@/features/academic/actions';
 import { redirect } from 'next/navigation';
-import { AlertCircle } from 'lucide-react';
-import Link from 'next/link';
 
 export const revalidate = 0;
 
@@ -14,67 +13,39 @@ export default async function NewEnrollmentPage() {
     redirect('/login');
   }
 
-  // 1. Fetch Profile to check if it's complete
+  // 1. Fetch User Profile
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('full_name, father_name, date_of_birth, profile_picture_url')
+    .select('*')
     .eq('id', user.id)
     .single();
 
-  const isProfileComplete = profile && profile.full_name && profile.father_name && profile.date_of_birth && profile.profile_picture_url;
-
-  // 2. Fetch active Sessions
-  const { data: sessions } = await supabase
-    .from('sessions')
-    .select('id, name, year, type')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
-
-  // 3. Fetch Courses
-  const { data: courses } = await supabase
-    .from('courses')
-    .select('id, name, level')
-    .order('created_at', { ascending: false });
-
-  if (!isProfileComplete) {
+  if (!profile || !profile.cnic) {
     return (
       <div className="max-w-3xl mx-auto space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Exam Application</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Start a new enrollment application.</p>
-        </div>
-
-        <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-6 flex gap-4">
-          <AlertCircle className="size-6 text-amber-600 dark:text-amber-500 shrink-0" />
-          <div>
-            <h3 className="font-semibold text-amber-900 dark:text-amber-200">Incomplete Profile</h3>
-            <p className="text-amber-700 dark:text-amber-400 mt-1 text-sm">
-              You must complete your profile with your personal details and a passport-size photograph before you can apply for an exam.
-            </p>
-            <div className="mt-4">
-              <Link
-                href="/student/profile"
-                className="inline-flex items-center justify-center px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium transition-colors"
-              >
-                Go to Profile Settings
-              </Link>
-            </div>
-          </div>
+        <div className="p-4 bg-amber-50 text-amber-800 rounded">
+          You must set your CNIC in your profile before applying.
         </div>
       </div>
     );
   }
 
+  // 2. Fetch all student details via CNIC Engine
+  const studentData = await fetchStudentByCnicAction(profile.cnic);
+
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Exam Application</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Select an active session and course to apply as a Private Candidate.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          Complete the 5-step application process. 
+          As a private student, your application will be routed to the selected institute for attestation.
+        </p>
       </div>
 
-      <EnrollmentForm
-        sessions={sessions || []}
-        courses={courses || []}
+      <AdmissionWizard 
+        initialData={studentData} 
+        isPrivate={true} 
       />
     </div>
   );
