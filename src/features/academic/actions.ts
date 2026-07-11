@@ -21,7 +21,7 @@ export async function createSessionAction(state: any, formData: FormData) {
     ah_year: ahYear,
     type,
     admission_open_date: admissionOpenDate,
-    is_active: true,
+    status: 'upcoming',
   }).select('id').single();
 
   if (error) {
@@ -69,7 +69,7 @@ export async function createFullSessionAction(payload: {
     single_fee_date: payload.singleFeeDate,
     double_fee_date: payload.doubleFeeDate,
     triple_fee_date: payload.tripleFeeDate,
-    is_active: true,
+    status: 'upcoming',
   }).select('id').single();
 
   if (sessionError) {
@@ -478,6 +478,34 @@ export async function saveMarksAction(payload: {
     }
   }
 
+  revalidatePath('/teacher/marks');
   return { success: true };
 }
 
+export async function updateSessionStatusAction(sessionId: string, status: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('sessions').update({ status }).eq('id', sessionId);
+  if (error) return { error: error.message };
+  revalidatePath('/backstage/sessions');
+  return { success: true };
+}
+
+export async function lockSessionAction(sessionId: string, email: string, password: string) {
+  const supabase = await createClient();
+  
+  // Verify credentials
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (authError || !authData.user) {
+    return { error: 'Invalid admin credentials' };
+  }
+
+  const { error } = await supabase.from('sessions').update({ is_locked: true }).eq('id', sessionId);
+  if (error) return { error: error.message };
+  
+  revalidatePath('/backstage/sessions');
+  return { success: true };
+}

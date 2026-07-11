@@ -27,7 +27,7 @@ export default async function NewEnrollmentPage() {
   const { data: sessions } = await supabase
     .from('sessions')
     .select('id, name, year, type')
-    .eq('is_active', true)
+    .eq('status', 'active')
     .order('created_at', { ascending: false });
 
   // 3. Fetch Courses

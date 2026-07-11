@@ -23,7 +23,7 @@ export default async function InstituteBulkEnrollPage() {
   const { data: sessions } = await supabase
     .from('sessions')
     .select('*')
-    .eq('is_active', true)
+    .eq('status', 'active')
     .order('year', { ascending: false });
 
   // Fetch courses

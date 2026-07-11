@@ -1,12 +1,16 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Plus, Search, CalendarClock, Settings, Trash2 } from 'lucide-react';
+import { Plus, Search, CalendarClock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SessionListActions from './session-list-actions';
 
 export const revalidate = 0;
 
 export default async function SessionsPage() {
   const supabase = await createClient();
+  
+  const { data: userData } = await supabase.auth.getUser();
+  const userEmail = userData?.user?.email || '';
   
   const { data: sessions, error } = await supabase
     .from('sessions')
@@ -70,40 +74,21 @@ export default async function SessionsPage() {
                     {session.type}
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      session.is_active 
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                      session.status === 'active'
                         ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400'
+                        : session.status === 'upcoming' 
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
                         : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
                     }`}>
-                      {session.is_active ? 'Active' : 'Closed'}
+                      {session.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                     {session.admission_open_date ? new Date(session.admission_open_date).toLocaleDateString() : 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <Link href={`/backstage/sessions/editor?clone=${session.id}`} className="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400 dark:hover:text-emerald-300 font-medium text-sm flex items-center gap-1">
-                        <Plus className="size-4" />
-                        Clone
-                      </Link>
-                      
-                      <Link href={`/backstage/sessions/editor?edit=${session.id}`} className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm flex items-center gap-1">
-                        <Settings className="size-4" />
-                        Manage
-                      </Link>
-                      
-                      <form action={async () => {
-                        'use server';
-                        const { deleteSessionAction } = await import('@/features/academic/actions');
-                        await deleteSessionAction(session.id.toString());
-                      }}>
-                        <button type="submit" className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm flex items-center gap-1">
-                          <Trash2 className="size-4" />
-                          Delete
-                        </button>
-                      </form>
-                    </div>
+                    <SessionListActions session={session} userEmail={userEmail} />
                   </td>
                 </tr>
               ))}
