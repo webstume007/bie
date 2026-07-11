@@ -7,12 +7,13 @@ import { processAdmissionAction } from '@/features/academic/actions';
 
 interface AdmissionWizardProps {
   initialData?: any;
+  activeSessions?: any[];
   isPrivate?: boolean;
   instituteId?: string; // Pre-filled if institute is doing it, or selected later if private
   onComplete?: () => void;
 }
 
-export function AdmissionWizard({ initialData, isPrivate, instituteId, onComplete }: AdmissionWizardProps) {
+export function AdmissionWizard({ initialData, activeSessions, isPrivate, instituteId, onComplete }: AdmissionWizardProps) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -33,8 +34,8 @@ export function AdmissionWizard({ initialData, isPrivate, instituteId, onComplet
     instituteAddress: initialData?.student?.institute_address || '',
     nearExamCenter: initialData?.student?.near_examination_center || '',
     // Academic fields
-    sessionId: '',
-    courseId: initialData?.eligibility?.eligibleCourseIds?.[0] || '', // Default to first eligible
+    sessionId: activeSessions?.length === 1 ? activeSessions[0].id.toString() : '',
+    courseId: initialData?.eligibility?.eligibleCourses?.[0]?.id || '', // Default to first eligible
     subjectIds: initialData?.eligibility?.supplySubjectIds || [], // Pre-fill supply subjects if applicable
     instituteId: instituteId || '', // For private students this must be selected
   });
@@ -160,20 +161,23 @@ export function AdmissionWizard({ initialData, isPrivate, instituteId, onComplet
              </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Session</label>
-              <select name="sessionId" value={formData.sessionId} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
-                <option value="">Select Session</option>
-                {/* Options should be passed in as props or fetched */}
-                <option value="1">Annual 2026</option> 
-              </select>
-            </div>
+            {(!activeSessions || activeSessions.length > 1) && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Session</label>
+                <select name="sessionId" value={formData.sessionId} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                  <option value="">Select Session</option>
+                  {activeSessions?.map((s: any) => (
+                    <option key={s.id} value={s.id}>{s.name || `${s.year} ${s.type}`}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Course</label>
               <select name="courseId" value={formData.courseId} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
                 <option value="">Select Course</option>
-                {initialData?.eligibility?.eligibleCourseIds?.map((cId: string) => (
-                  <option key={cId} value={cId}>Course ID: {cId}</option>
+                {initialData?.eligibility?.eligibleCourses?.map((c: any) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
             </div>

@@ -6,7 +6,7 @@ import { AdmissionWizard } from '@/components/admission-wizard';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function InstituteAdmissionClient({ instituteId }: { instituteId: string }) {
+export default function InstituteAdmissionClient({ instituteId, activeSessions }: { instituteId: string, activeSessions?: any[] }) {
   const [studentData, setStudentData] = useState<any>(null);
   const [mode, setMode] = useState<'lookup' | 'wizard'>('lookup');
 
@@ -31,6 +31,7 @@ export default function InstituteAdmissionClient({ instituteId }: { instituteId:
         </div>
         <AdmissionWizard 
           initialData={studentData} 
+          activeSessions={activeSessions}
           isPrivate={false} 
           instituteId={instituteId} 
           onComplete={() => {

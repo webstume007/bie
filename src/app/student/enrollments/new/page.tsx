@@ -33,6 +33,17 @@ export default async function NewEnrollmentPage() {
   // 2. Fetch all student details via CNIC Engine
   const studentData = await fetchStudentByCnicAction(profile.cnic);
 
+  // 3. Fetch Active Sessions
+  const { data: activeSessions } = await supabase
+    .from('sessions')
+    .select('id, title, type, ad_year, ah_year')
+    .eq('status', 'active');
+
+  const mappedSessions = activeSessions?.map((s: any) => ({
+    id: s.id,
+    name: s.title || `${s.ad_year} / ${s.ah_year} AH (${s.type})`
+  })) || [];
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
@@ -45,6 +56,7 @@ export default async function NewEnrollmentPage() {
 
       <AdmissionWizard 
         initialData={studentData} 
+        activeSessions={mappedSessions}
         isPrivate={true} 
       />
     </div>

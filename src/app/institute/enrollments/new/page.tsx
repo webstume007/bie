@@ -39,9 +39,14 @@ export default async function InstituteBulkEnrollPage() {
     .eq('institute_id', institute.id)
     .order('full_name');
 
+  const mappedSessions = sessions?.map((s: any) => ({
+    id: s.id,
+    name: s.title || `${s.ad_year} / ${s.ah_year} AH (${s.type})`
+  })) || [];
+
   return (
     <InstituteShell>
-      <InstituteAdmissionClient instituteId={institute.id.toString()} />
+      <InstituteAdmissionClient instituteId={institute.id.toString()} activeSessions={mappedSessions} />
     </InstituteShell>
   );
 }
