@@ -33,6 +33,8 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
     singleFeeDate: '',
     doubleFeeDate: '',
     tripleFeeDate: '',
+    affiliationFee: '',
+    affiliationRenewFee: '',
   });
 
   const [courses, setCourses] = useState<any[]>([]);
@@ -48,6 +50,8 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
         singleFeeDate: initialData.single_fee_date || '',
         doubleFeeDate: initialData.double_fee_date || '',
         tripleFeeDate: initialData.triple_fee_date || '',
+        affiliationFee: initialData.affiliationFee?.toString() || '',
+        affiliationRenewFee: initialData.affiliationRenewFee?.toString() || '',
       });
 
       if (initialData.courses) {
@@ -183,6 +187,8 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
       singleFeeDate: sessionData.singleFeeDate,
       doubleFeeDate: sessionData.doubleFeeDate,
       tripleFeeDate: sessionData.tripleFeeDate,
+      affiliationFee: parseFloat(sessionData.affiliationFee) || 0,
+      affiliationRenewFee: parseFloat(sessionData.affiliationRenewFee) || 0,
       courses: courses.map(c => ({
         id: c.originalId,
         courseName: c.courseName,
@@ -292,6 +298,14 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
           <div className="space-y-2">
             <Label>Triple Fee Deadline</Label>
             <Input type="date" required value={sessionData.tripleFeeDate} onChange={e => setSessionData({...sessionData, tripleFeeDate: e.target.value})} />
+          </div>
+          <div className="space-y-2">
+            <Label>Institute Affiliation Fee</Label>
+            <Input type="number" required placeholder="0" value={sessionData.affiliationFee} onChange={e => setSessionData({...sessionData, affiliationFee: e.target.value})} />
+          </div>
+          <div className="space-y-2">
+            <Label>Affiliation Renewal Fee</Label>
+            <Input type="number" required placeholder="0" value={sessionData.affiliationRenewFee} onChange={e => setSessionData({...sessionData, affiliationRenewFee: e.target.value})} />
           </div>
         </div>
       </div>

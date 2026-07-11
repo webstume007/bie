@@ -41,6 +41,8 @@ export async function createFullSessionAction(payload: {
   singleFeeDate: string;
   doubleFeeDate: string;
   tripleFeeDate: string;
+  affiliationFee: number;
+  affiliationRenewFee: number;
   courses: {
     courseName: string;
     singleFee: number;
@@ -268,7 +270,6 @@ export async function fetchFullSessionAction(sessionId: string) {
     .from('session_courses')
     .select(`
       id,
-      base_fee,
       single_fee,
       double_fee,
       triple_fee,
@@ -315,6 +316,8 @@ export async function fetchFullSessionAction(sessionId: string) {
     success: true, 
     data: {
       ...session,
+      affiliationFee: session.affiliation_fee,
+      affiliationRenewFee: session.affiliation_renew_fee,
       courses: formattedCourses
     }
   };
@@ -330,6 +333,8 @@ export async function updateFullSessionAction(payload: {
   singleFeeDate: string;
   doubleFeeDate: string;
   tripleFeeDate: string;
+  affiliationFee: number;
+  affiliationRenewFee: number;
   courses: {
     id?: number;
     courseName: string;
@@ -358,6 +363,8 @@ export async function updateFullSessionAction(payload: {
     single_fee_date: payload.singleFeeDate,
     double_fee_date: payload.doubleFeeDate,
     triple_fee_date: payload.tripleFeeDate,
+    affiliation_fee: payload.affiliationFee,
+    affiliation_renew_fee: payload.affiliationRenewFee,
   }).eq('id', payload.id);
 
   if (sessionError) return { error: 'Failed to update session: ' + sessionError.message };
