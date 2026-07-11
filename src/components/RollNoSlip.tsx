@@ -11,7 +11,7 @@ export function RollNoSlip({ application }: RollNoSlipProps) {
   const instituteName = isPrivate ? 'Private Candidate' : application.institutes?.name;
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white text-black p-8 border-2 border-neutral-800 shadow-lg font-urdu print:shadow-none print:border-none">
+    <div className="roll-no-slip-container w-full max-w-3xl mx-auto bg-white text-black p-8 border-2 border-neutral-800 shadow-lg font-urdu print:shadow-none print:border-none">
       
       {/* Header */}
       <div className="flex justify-between items-center border-b-2 border-neutral-800 pb-4 mb-6">
@@ -48,7 +48,7 @@ export function RollNoSlip({ application }: RollNoSlipProps) {
         <div className="flex-1 grid grid-cols-2 gap-y-4 gap-x-8">
           <div>
             <p className="text-sm text-neutral-500 mb-1">Roll Number</p>
-            <p className="text-xl font-bold font-mono tracking-widest">{application.assigned_roll_no}</p>
+            <p className="slip-roll-no text-xl font-bold font-mono tracking-widest">{application.assigned_roll_no}</p>
           </div>
           <div>
             <p className="text-sm text-neutral-500 mb-1">Tracking ID</p>

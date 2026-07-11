@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { GraduationCap } from 'lucide-react';
+import { MarksEntryRow } from './marks-entry-row';
 
 export const revalidate = 0;
 
@@ -10,7 +11,6 @@ export default async function TeacherMarksPage() {
 
   if (!user) redirect('/login');
 
-  // Verify role
   const { data: profile } = await supabase
     .from('user_profiles')
     .select('role_id, roles(name)')
@@ -22,7 +22,6 @@ export default async function TeacherMarksPage() {
     redirect('/dashboard');
   }
 
-  // Same fetch logic, simplified for UI scaffold
   const { data: staffData } = await supabase
     .from('institute_staff')
     .select('institute_id')
@@ -38,7 +37,14 @@ export default async function TeacherMarksPage() {
         tracking_id,
         assigned_roll_no,
         courses ( name ),
-        institute_students ( full_name )
+        institute_students ( full_name ),
+        exam_application_subjects (
+          id,
+          subject_id,
+          marks_obtained,
+          status,
+          subjects ( name, total_marks )
+        )
       `)
       .eq('institute_id', staffData.institute_id)
       .eq('status', 'APPROVED')
@@ -76,23 +82,7 @@ export default async function TeacherMarksPage() {
                 </tr>
               ) : (
                 enrollments.map((app: any) => (
-                  <tr key={app.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                    <td className="px-6 py-4 font-mono font-bold text-neutral-900 dark:text-white">
-                      {app.assigned_roll_no || 'N/A'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-neutral-900 dark:text-white">{app.institute_students?.full_name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-neutral-900 dark:text-white">{app.courses?.name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <input type="number" className="w-20 px-2 py-1 text-sm border rounded" placeholder="0" />
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="px-3 py-1 bg-indigo-600 text-white rounded text-sm hover:bg-indigo-700">Save</button>
-                    </td>
-                  </tr>
+                  <MarksEntryRow key={app.id} application={app} />
                 ))
               )}
             </tbody>

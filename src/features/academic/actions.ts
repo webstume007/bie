@@ -435,3 +435,26 @@ export async function updateFullSessionAction(payload: {
   revalidatePath('/backstage/sessions');
   return { success: true };
 }
+
+
+export async function saveMarksAction(payload: {
+  applicationId: number;
+  marks: { subjectId: number; marksObtained: number }[];
+}) {
+  const supabase = await createClient();
+
+  for (const mark of payload.marks) {
+    const { error } = await supabase
+      .from('exam_application_subjects')
+      .update({ marks_obtained: mark.marksObtained, status: 'GRADED' })
+      .match({ application_id: payload.applicationId, subject_id: mark.subjectId });
+    
+    if (error) {
+      console.error('Failed to save marks:', error);
+      return { success: false, error: 'Failed to save marks' };
+    }
+  }
+
+  return { success: true };
+}
+
