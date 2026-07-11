@@ -369,9 +369,14 @@ export async function updateFullSessionAction(payload: {
 
   if (sessionError) return { error: 'Failed to update session: ' + sessionError.message };
 
-  // For a robust implementation without breaking foreign keys, we'll try to update existing session_courses,
-  // or insert new ones. Removing existing ones is risky if they have applications linked.
-  
+  // 2. Cleanup removed courses
+  const currentCourseIds = payload.courses.filter(c => c.id).map(c => c.id);
+  if (currentCourseIds.length > 0) {
+    await supabase.from('session_courses').delete().eq('session_id', payload.id).not('id', 'in', `(${currentCourseIds.join(',')})`);
+  } else {
+    await supabase.from('session_courses').delete().eq('session_id', payload.id);
+  }
+
   for (const course of payload.courses) {
     let courseId: number;
     const { data: existingCourse } = await supabase.from('courses').select('id').ilike('name', course.courseName).maybeSingle();
@@ -388,6 +393,7 @@ export async function updateFullSessionAction(payload: {
     if (course.id) {
       // Update existing
       await supabase.from('session_courses').update({
+        course_id: courseId, // Ensure linked course is updated if name changed
         single_fee: course.singleFee,
         double_fee: course.doubleFee,
         triple_fee: course.tripleFee,
@@ -395,6 +401,15 @@ export async function updateFullSessionAction(payload: {
         mandatory_electives_count: course.mandatoryCount,
       }).eq('id', course.id);
       sessionCourseId = course.id;
+
+      // Cleanup removed subjects for existing course
+      const currentSubIds = course.subjects?.filter(s => s.id).map(s => s.id) || [];
+      if (currentSubIds.length > 0) {
+        await supabase.from('session_course_subjects').delete().eq('session_course_id', sessionCourseId).not('id', 'in', `(${currentSubIds.join(',')})`);
+      } else {
+        await supabase.from('session_course_subjects').delete().eq('session_course_id', sessionCourseId);
+      }
+
     } else {
       // Insert new
       const { data: newSc } = await supabase.from('session_courses').insert({
@@ -424,6 +439,7 @@ export async function updateFullSessionAction(payload: {
 
         if (sub.id) {
           await supabase.from('session_course_subjects').update({
+            subject_id: subjectId, // Ensure linked subject is updated if name changed
             total_marks: sub.totalMarks,
             is_compulsory: sub.isCompulsory,
           }).eq('id', sub.id);
