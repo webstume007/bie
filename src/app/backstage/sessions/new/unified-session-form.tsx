@@ -29,6 +29,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
     ahYear: '',
     type: 'regular',
     admissionOpenDate: '',
+    admissionCloseDate: '',
     singleFeeDate: '',
     doubleFeeDate: '',
     tripleFeeDate: '',
@@ -43,6 +44,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
         ahYear: initialData.ah_year || '',
         type: initialData.type || 'regular',
         admissionOpenDate: initialData.admission_open_date || '',
+        admissionCloseDate: initialData.admission_close_date || '',
         singleFeeDate: initialData.single_fee_date || '',
         doubleFeeDate: initialData.double_fee_date || '',
         tripleFeeDate: initialData.triple_fee_date || '',
@@ -56,6 +58,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
           singleFee: c.singleFee?.toString() || '0',
           doubleFee: c.doubleFee?.toString() || '0',
           tripleFee: c.tripleFee?.toString() || '0',
+          haveSingleFeeTillClose: c.haveSingleFeeTillClose || false,
           mandatoryCount: c.mandatoryCount?.toString() || '0',
           subjects: (c.subjects || []).map((s: any) => ({
             uid: Date.now().toString() + Math.random().toString(),
@@ -80,6 +83,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
         singleFee: '',
         doubleFee: '',
         tripleFee: '',
+        haveSingleFeeTillClose: false,
         mandatoryCount: '0',
         subjects: [],
       },
@@ -164,8 +168,8 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
     setIsSubmitting(true);
     setError(null);
 
-    if (!sessionData.adYear || !sessionData.ahYear || !sessionData.admissionOpenDate || !sessionData.singleFeeDate || !sessionData.doubleFeeDate || !sessionData.tripleFeeDate) {
-      setError('Please fill all session details including fee deadlines.');
+    if (!sessionData.adYear || !sessionData.ahYear || !sessionData.admissionOpenDate || !sessionData.admissionCloseDate || !sessionData.singleFeeDate || !sessionData.doubleFeeDate || !sessionData.tripleFeeDate) {
+      setError('Please fill all session details including admission close date and fee deadlines.');
       setIsSubmitting(false);
       return;
     }
@@ -175,6 +179,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
       ahYear: sessionData.ahYear,
       type: sessionData.type,
       admissionOpenDate: sessionData.admissionOpenDate,
+      admissionCloseDate: sessionData.admissionCloseDate,
       singleFeeDate: sessionData.singleFeeDate,
       doubleFeeDate: sessionData.doubleFeeDate,
       tripleFeeDate: sessionData.tripleFeeDate,
@@ -184,6 +189,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
         singleFee: parseFloat(c.singleFee) || 0,
         doubleFee: parseFloat(c.doubleFee) || 0,
         tripleFee: parseFloat(c.tripleFee) || 0,
+        haveSingleFeeTillClose: Boolean(c.haveSingleFeeTillClose),
         mandatoryCount: parseInt(c.mandatoryCount) || 0,
         subjects: c.subjects.map((s: any) => ({
           id: s.originalId,
@@ -272,6 +278,10 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
             <Input type="date" required value={sessionData.admissionOpenDate} onChange={e => setSessionData({...sessionData, admissionOpenDate: e.target.value})} />
           </div>
           <div className="space-y-2">
+            <Label>Admission Close Date</Label>
+            <Input type="date" required value={sessionData.admissionCloseDate} onChange={e => setSessionData({...sessionData, admissionCloseDate: e.target.value})} />
+          </div>
+          <div className="space-y-2">
             <Label>Single Fee Deadline</Label>
             <Input type="date" required value={sessionData.singleFeeDate} onChange={e => setSessionData({...sessionData, singleFeeDate: e.target.value})} />
           </div>
@@ -342,6 +352,12 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
                     <div className="space-y-2 lg:col-span-2">
                       <Label className="text-slate-700 dark:text-slate-300 font-semibold">Course Name</Label>
                       <Input type="text" placeholder="e.g. Aalim" required value={course.courseName} onChange={e => handleCourseChange(course.uid, 'courseName', e.target.value)} className="bg-white dark:bg-slate-900" />
+                    </div>
+                    <div className="space-y-2 lg:col-span-1 flex items-end pb-2">
+                      <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        <input type="checkbox" checked={course.haveSingleFeeTillClose} onChange={e => handleCourseChange(course.uid, 'haveSingleFeeTillClose', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500" />
+                        Single Fee till Admission Close
+                      </label>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-700 dark:text-slate-300 font-semibold">Mandatory Electives Count</Label>

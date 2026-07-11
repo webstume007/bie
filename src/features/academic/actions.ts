@@ -37,6 +37,7 @@ export async function createFullSessionAction(payload: {
   ahYear: string;
   type: string;
   admissionOpenDate: string;
+  admissionCloseDate: string;
   singleFeeDate: string;
   doubleFeeDate: string;
   tripleFeeDate: string;
@@ -45,6 +46,7 @@ export async function createFullSessionAction(payload: {
     singleFee: number;
     doubleFee: number;
     tripleFee: number;
+    haveSingleFeeTillClose: boolean;
     mandatoryCount: number;
     subjects: {
       subjectName: string;
@@ -61,6 +63,7 @@ export async function createFullSessionAction(payload: {
     ah_year: payload.ahYear,
     type: payload.type,
     admission_open_date: payload.admissionOpenDate,
+    admission_close_date: payload.admissionCloseDate,
     single_fee_date: payload.singleFeeDate,
     double_fee_date: payload.doubleFeeDate,
     triple_fee_date: payload.tripleFeeDate,
@@ -97,6 +100,7 @@ export async function createFullSessionAction(payload: {
       single_fee: course.singleFee,
       double_fee: course.doubleFee,
       triple_fee: course.tripleFee,
+      have_single_fee_till_close: course.haveSingleFeeTillClose,
       mandatory_electives_count: course.mandatoryCount,
     }).select('id').single();
 
@@ -268,6 +272,7 @@ export async function fetchFullSessionAction(sessionId: string) {
       single_fee,
       double_fee,
       triple_fee,
+      have_single_fee_till_close,
       mandatory_electives_count,
       courses ( id, name )
     `)
@@ -293,6 +298,7 @@ export async function fetchFullSessionAction(sessionId: string) {
         singleFee: sc.single_fee,
         doubleFee: sc.double_fee,
         tripleFee: sc.triple_fee,
+        haveSingleFeeTillClose: sc.have_single_fee_till_close,
         mandatoryCount: sc.mandatory_electives_count,
         subjects: subjects?.map(sub => ({
           id: sub.id,
@@ -320,6 +326,7 @@ export async function updateFullSessionAction(payload: {
   ahYear: string;
   type: string;
   admissionOpenDate: string;
+  admissionCloseDate: string;
   singleFeeDate: string;
   doubleFeeDate: string;
   tripleFeeDate: string;
@@ -329,6 +336,7 @@ export async function updateFullSessionAction(payload: {
     singleFee: number;
     doubleFee: number;
     tripleFee: number;
+    haveSingleFeeTillClose: boolean;
     mandatoryCount: number;
     subjects: {
       id?: number;
@@ -346,6 +354,7 @@ export async function updateFullSessionAction(payload: {
     ah_year: payload.ahYear,
     type: payload.type,
     admission_open_date: payload.admissionOpenDate,
+    admission_close_date: payload.admissionCloseDate,
     single_fee_date: payload.singleFeeDate,
     double_fee_date: payload.doubleFeeDate,
     triple_fee_date: payload.tripleFeeDate,
@@ -375,6 +384,7 @@ export async function updateFullSessionAction(payload: {
         single_fee: course.singleFee,
         double_fee: course.doubleFee,
         triple_fee: course.tripleFee,
+        have_single_fee_till_close: course.haveSingleFeeTillClose,
         mandatory_electives_count: course.mandatoryCount,
       }).eq('id', course.id);
       sessionCourseId = course.id;
@@ -386,6 +396,7 @@ export async function updateFullSessionAction(payload: {
         single_fee: course.singleFee,
         double_fee: course.doubleFee,
         triple_fee: course.tripleFee,
+        have_single_fee_till_close: course.haveSingleFeeTillClose,
         mandatory_electives_count: course.mandatoryCount,
       }).select('id').single();
       if (!newSc) continue;

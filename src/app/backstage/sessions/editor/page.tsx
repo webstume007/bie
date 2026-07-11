@@ -3,9 +3,10 @@ import { fetchFullSessionAction } from '@/features/academic/actions';
 
 export const revalidate = 0;
 
-export default async function SessionEditorPage({ searchParams }: { searchParams: { edit?: string; clone?: string } }) {
-  const editId = searchParams.edit;
-  const cloneId = searchParams.clone;
+export default async function SessionEditorPage({ searchParams }: { searchParams: Promise<{ edit?: string; clone?: string }> }) {
+  const params = await searchParams;
+  const editId = params.edit;
+  const cloneId = params.clone;
   const sessionId = editId || cloneId;
   
   let initialData = null;
