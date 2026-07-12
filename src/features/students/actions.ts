@@ -13,11 +13,16 @@ export async function updateStudentProfileAction(formData: FormData) {
 
   const fullName = formData.get('fullName') as string;
   const fatherName = formData.get('fatherName') as string;
+  const nameUrdu = formData.get('nameUrdu') as string;
+  const fatherNameUrdu = formData.get('fatherNameUrdu') as string;
   const dob = formData.get('dob') as string;
   const gender = formData.get('gender') as string;
   const bFormCnic = formData.get('bFormCnic') as string;
   const address = formData.get('address') as string;
   const contactNumber = formData.get('contactNumber') as string;
+  const whatsappNumber = formData.get('whatsappNumber') as string;
+  const instituteId = formData.get('instituteId') as string;
+  const profileImageUrl = formData.get('profileImageUrl') as string;
 
   if (!fullName || !fatherName || !dob || !gender || !bFormCnic || !address) {
     return { error: 'Please fill in all required fields.' };
@@ -42,10 +47,15 @@ export async function updateStudentProfileAction(formData: FormData) {
     .upsert({
       id: user.id,
       father_name: fatherName,
+      name_urdu: nameUrdu || null,
+      father_name_urdu: fatherNameUrdu || null,
       dob,
       gender,
       b_form_cnic: bFormCnic,
       permanent_address: address,
+      whatsapp_number: whatsappNumber || null,
+      institute_id: instituteId ? parseInt(instituteId) : null,
+      profile_image_url: profileImageUrl || null,
     }, { onConflict: 'id' });
 
   if (studentError) {

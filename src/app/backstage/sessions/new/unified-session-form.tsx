@@ -270,7 +270,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
           </div>
           <div className="space-y-2">
             <Label>Session Phase</Label>
-            <select
+            <select className=" dark:bg-slate-900\
               value={sessionData.type}
               onChange={e => setSessionData({...sessionData, type: e.target.value})}
               className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -417,7 +417,7 @@ export default function UnifiedSessionForm({ initialData, mode = 'create', editi
                             </div>
                             <div className="w-full sm:w-32 space-y-1.5">
                               <Label className="text-xs text-slate-500">Type</Label>
-                              <select
+                              <select className=" dark:bg-slate-900\
                                 value={subject.isCompulsory ? 'true' : 'false'}
                                 onChange={e => handleSubjectChange(course.uid, subject.uid, 'isCompulsory', e.target.value === 'true')}
                                 className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
